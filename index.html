@@ -8,10 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --navy:#002F6C; --navy-dark:#001a3d; --gold:#C9A227; --gold-light:#e6c76a;
-      --white:#ffffff; --offwhite:#f7f8fa; --gray:#6b7280; --light-gray:#e5e7eb;
+      --navy:#151E49; --navy-dark:#0B1026; --gold:#AD986E; --gold-light:#FDD000;
+      --white:#ffffff; --offwhite:#f7f8fa; --gray:#5A5E63; --light-gray:#e5e7eb;
       --radius:4px;
-      --shadow:0 20px 60px rgba(0,47,108,.15);
+      --shadow:0 20px 60px rgba(21,30,73,.15);
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -64,7 +64,7 @@
     }
     #cover::after{
       content:""; position:absolute; inset:0; z-index:1;
-      background:linear-gradient(180deg,rgba(0,47,108,.7) 0%,rgba(0,26,61,.85) 100%);
+      background:linear-gradient(180deg,rgba(21,30,73,.7) 0%,rgba(11,16,38,.85) 100%);
     }
     #cover .container{position:relative; z-index:2; max-width:900px}
     .cover-logo{
@@ -72,9 +72,9 @@
     }
     .cover-badge{
       display:flex; align-items:center; justify-content:center; gap:8px;
-      background:rgba(201,162,39,.2); color:var(--gold-light);
+      background:rgba(173,152,110,.2); color:var(--gold-light);
       padding:8px 18px; border-radius:100px; font-size:12px; font-weight:600;
-      margin:0 auto 32px; border:1px solid rgba(201,162,39,.4);
+      margin:0 auto 32px; border:1px solid rgba(173,152,110,.4);
       width:fit-content; animation:fadeInDown .8s ease-out;
     }
     @keyframes fadeInDown{from{opacity:0; transform:translateY(-12px)}to{opacity:1; transform:translateY(0)}}
@@ -120,7 +120,7 @@
     .impact-visual{
       border-radius:var(--radius); min-height:460px; display:flex; flex-direction:column;
       justify-content:flex-end; padding:40px; color:#fff; position:relative; overflow:hidden;
-      background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.92) 100%);
+      background:linear-gradient(180deg,transparent 30%,rgba(21,30,73,.92) 100%);
     }
     .impact-visual .bg{position:absolute; inset:0; z-index:0; background-size:cover; background-position:center; opacity:.9}
     .impact-visual .topic{font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold-light); margin-bottom:12px; position:relative; z-index:1}
@@ -184,7 +184,7 @@
       color:#fff; position:relative; overflow:hidden;
     }
     .campus-card .bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center}
-    .campus-card .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.92) 100%)}
+    .campus-card .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(21,30,73,.92) 100%)}
     .campus-card > div{position:relative;z-index:1}
     .campus-card h4{font-size:18px;font-weight:700;margin-bottom:4px}
     .campus-card p{font-size:13px;opacity:.9}
@@ -248,7 +248,7 @@
       display:flex; align-items:flex-end; padding:32px; color:#fff;
     }
     .practice-visual .bg{position:absolute; inset:0; background-size:cover; background-position:center; z-index:0}
-    .practice-visual .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.9) 100%)}
+    .practice-visual .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(21,30,73,.9) 100%)}
     .practice-visual .overlay{position:relative; z-index:1}
     .practice-visual .team-name{
       display:inline-block; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
@@ -305,15 +305,15 @@
     .globe-atmosphere-outer{fill:none; stroke:url(#atmOuterGrad); stroke-width:8; pointer-events:none; opacity:.6}
     .globe-atmosphere-inner{fill:url(#globeAtmosphere); pointer-events:none}
     .globe-graticule{fill:none; stroke:rgba(255,255,255,.12); stroke-width:.7; pointer-events:none}
-    .globe-sphere{fill:none; stroke:rgba(201,162,39,.45); stroke-width:1.8; pointer-events:none}
+    .globe-sphere{fill:none; stroke:rgba(173,152,110,.45); stroke-width:1.8; pointer-events:none}
     /* Country polygons */
     .globe-country{
       fill:rgba(255,255,255,.13); stroke:rgba(255,255,255,.22); stroke-width:.6;
       transition:fill .3s, filter .3s; cursor:pointer;
     }
     .globe-country:hover{
-      fill:rgba(201,162,39,.45);
-      filter:drop-shadow(0 0 8px rgba(201,162,39,.5));
+      fill:rgba(173,152,110,.45);
+      filter:drop-shadow(0 0 8px rgba(173,152,110,.5));
     }
     /* Partner arcs — with animated dash flow */
     .globe-arc{
@@ -517,21 +517,21 @@
             <svg id="globe-svg" viewBox="0 0 480 480">
               <defs>
                 <radialGradient id="globeOcean" cx="35%" cy="30%" r="85%">
-                  <stop offset="0%" stop-color="#0d5db8"/>
-                  <stop offset="50%" stop-color="#003580"/>
-                  <stop offset="85%" stop-color="#001845"/>
-                  <stop offset="100%" stop-color="#000d28"/>
+                  <stop offset="0%" stop-color="#1A3582"/>
+                  <stop offset="50%" stop-color="#131F55"/>
+                  <stop offset="85%" stop-color="#0E1736"/>
+                  <stop offset="100%" stop-color="#060A14"/>
                 </radialGradient>
                 <radialGradient id="globeAtmosphere" cx="50%" cy="50%" r="50%">
-                  <stop offset="75%" stop-color="rgba(201,162,39,0)"/>
-                  <stop offset="90%" stop-color="rgba(201,162,39,.12)"/>
-                  <stop offset="97%" stop-color="rgba(201,162,39,.25)"/>
-                  <stop offset="100%" stop-color="rgba(201,162,39,0)"/>
+                  <stop offset="75%" stop-color="rgba(173,152,110,0)"/>
+                  <stop offset="90%" stop-color="rgba(173,152,110,.12)"/>
+                  <stop offset="97%" stop-color="rgba(173,152,110,.25)"/>
+                  <stop offset="100%" stop-color="rgba(173,152,110,0)"/>
                 </radialGradient>
                 <linearGradient id="atmOuterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="rgba(201,162,39,.08)"/>
+                  <stop offset="0%" stop-color="rgba(173,152,110,.08)"/>
                   <stop offset="50%" stop-color="rgba(138,180,248,.05)"/>
-                  <stop offset="100%" stop-color="rgba(201,162,39,.08)"/>
+                  <stop offset="100%" stop-color="rgba(173,152,110,.08)"/>
                 </linearGradient>
                 <filter id="pointGlow" x="-150%" y="-150%" width="400%" height="400%">
                   <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -827,11 +827,11 @@
     <div class="map-placeholder">
       <svg viewBox="0 0 1000 500" preserveAspectRatio="none">
         <path fill="#ffffff" d="M220,180 Q250,160 280,180 T340,180 T400,200 T460,190 T520,210 T580,200 T640,220 T700,200 T760,210 T820,190 T880,200" opacity=".3"/>
-        <circle cx="180" cy="160" r="4" fill="#C9A227"/>
-        <circle cx="820" cy="180" r="4" fill="#C9A227"/>
-        <circle cx="880" cy="240" r="4" fill="#C9A227"/>
-        <circle cx="780" cy="320" r="4" fill="#C9A227"/>
-        <circle cx="520" cy="140" r="4" fill="#C9A227"/>
+        <circle cx="180" cy="160" r="4" fill="#AD986E"/>
+        <circle cx="820" cy="180" r="4" fill="#AD986E"/>
+        <circle cx="880" cy="240" r="4" fill="#AD986E"/>
+        <circle cx="780" cy="320" r="4" fill="#AD986E"/>
+        <circle cx="520" cy="140" r="4" fill="#AD986E"/>
       </svg>
       <div class="map-overlay">
         <h3>Silicon Valley · London · Sydney · Helsinki · Vancouver · Nanjing</h3>
