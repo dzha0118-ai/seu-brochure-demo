@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Southeast University: Global Impact, Rooted in China</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#002F6C; --navy-dark:#001a3d; --gold:#C9A227; --gold-light:#e6c76a;
+      --white:#ffffff; --offwhite:#f7f8fa; --gray:#6b7280; --light-gray:#e5e7eb;
+      --radius:4px;
+      --shadow:0 20px 60px rgba(0,47,108,.15);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"Inter",-apple-system,system-ui,sans-serif;
+      color:var(--navy); background:var(--offwhite);
+      overflow-x:hidden; line-height:1.6;
+    }
+    .chinese{font-family:"Noto Serif SC",serif}
+
+    /* Navigation */
+    nav{
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 32px; background:rgba(255,255,255,.95);
+      backdrop-filter:blur(12px); border-bottom:1px solid var(--light-gray);
+    }
+    .nav-logo{display:flex; align-items:center; gap:12px; font-weight:700; color:var(--navy); font-size:15px}
+    .nav-logo img{height:40px; width:auto}
+    .nav-links{display:flex; gap:24px; align-items:center}
+    .nav-links a{color:var(--navy); text-decoration:none; font-size:13px; font-weight:500; opacity:.8; transition:opacity .2s}
+    .nav-links a:hover{opacity:1; color:var(--gold)}
+    .nav-cta{padding:8px 18px; background:var(--navy); color:#fff; border-radius:100px; font-size:13px; font-weight:600}
+    .nav-cta:hover{background:var(--gold); color:var(--navy)}
+    .menu-btn{display:none; background:none; border:none; font-size:22px; cursor:pointer; color:var(--navy)}
+
+    @media(max-width:900px){
+      .nav-links{display:none; position:absolute; top:64px; left:0; right:0; background:#fff; flex-direction:column; padding:20px; gap:16px; border-bottom:1px solid var(--light-gray)}
+      .nav-links.open{display:flex}
+      .menu-btn{display:block}
+    }
+
+    /* Sections */
+    section{min-height:100vh; padding:100px 48px 60px; display:flex; align-items:center; justify-content:center; position:relative}
+    .container{width:100%; max-width:1200px; margin:0 auto}
+    .page-label{
+      display:inline-block; font-size:11px; font-weight:700; letter-spacing:2px;
+      text-transform:uppercase; color:var(--gold); margin-bottom:16px;
+    }
+
+    /* Cover */
+    #cover{
+      position:relative; color:#fff; text-align:center;
+      background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+    }
+    #cover::before{
+      content:""; position:absolute; inset:0; z-index:0;
+      background:url('cover_optimized.jpg') center/cover no-repeat;
+      opacity:.35;
+    }
+    #cover::after{
+      content:""; position:absolute; inset:0; z-index:1;
+      background:linear-gradient(180deg,rgba(0,47,108,.7) 0%,rgba(0,26,61,.85) 100%);
+    }
+    #cover .container{position:relative; z-index:2; max-width:900px}
+    .cover-logo{
+      height:80px; width:auto; margin-bottom:28px; filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
+    }
+    .cover-badge{
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      background:rgba(201,162,39,.2); color:var(--gold-light);
+      padding:8px 18px; border-radius:100px; font-size:12px; font-weight:600;
+      margin:0 auto 32px; border:1px solid rgba(201,162,39,.4);
+      width:fit-content; animation:fadeInDown .8s ease-out;
+    }
+    @keyframes fadeInDown{from{opacity:0; transform:translateY(-12px)}to{opacity:1; transform:translateY(0)}}
+    #cover h1{font-size:clamp(38px,6vw,72px); font-weight:800; line-height:1.05; margin-bottom:20px; letter-spacing:-1.5px}
+    #cover h1 span{color:var(--gold-light)}
+    #cover .subtitle{font-size:clamp(16px,2vw,22px); font-weight:300; opacity:.95; max-width:680px; margin:0 auto 48px}
+    .cover-meta{display:flex; justify-content:center; gap:40px; margin-top:60px; flex-wrap:wrap}
+    .cover-meta div{font-size:13px; opacity:.85}
+    .cover-meta strong{display:block; font-size:24px; font-weight:700; color:#fff; opacity:1; margin-bottom:2px}
+    .scroll-hint{position:absolute; bottom:30px; left:50%; transform:translateX(-50%); font-size:12px; opacity:.7; animation:bounce 2s infinite; z-index:2}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+    /* Intro */
+    #intro{background:var(--white)}
+    .split{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center}
+    .intro-quote{font-size:clamp(24px,3vw,36px); font-weight:700; line-height:1.3; color:var(--navy)}
+    .intro-quote span{color:var(--gold)}
+    .stats-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+    .stat-card{
+      background:var(--offwhite); border:1px solid var(--light-gray);
+      border-radius:var(--radius); padding:28px 22px; text-align:center;
+      transition:transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover{transform:translateY(-4px); box-shadow:var(--shadow)}
+    .stat-card .num{font-size:42px; font-weight:800; color:var(--navy); line-height:1}
+    .stat-card .num span{font-size:20px; color:var(--gold)}
+    .stat-card .label{font-size:13px; color:var(--gray); margin-top:10px; font-weight:500}
+
+    /* Impact pages */
+    .impact-page{background:var(--white)}
+    .impact-layout{display:grid; grid-template-columns:1.2fr 1fr; gap:56px; align-items:center}
+    .impact-visual{
+      border-radius:var(--radius); min-height:460px; display:flex; flex-direction:column;
+      justify-content:flex-end; padding:40px; color:#fff; position:relative; overflow:hidden;
+      background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.92) 100%);
+    }
+    .impact-visual .bg{position:absolute; inset:0; z-index:0; background-size:cover; background-position:center; opacity:.9}
+    .impact-visual .topic{font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold-light); margin-bottom:12px; position:relative; z-index:1}
+    .impact-visual h2{font-size:clamp(28px,3.5vw,44px); font-weight:800; line-height:1.1; position:relative; z-index:1}
+    .impact-visual .tagline{font-size:16px; opacity:.9; margin-top:16px; font-weight:300; position:relative; z-index:1}
+    .scholar-list{display:flex; flex-direction:column; gap:24px}
+    .scholar{
+      display:flex; gap:18px; align-items:flex-start;
+      padding:22px; border-radius:var(--radius); border:1px solid var(--light-gray);
+      background:var(--offwhite);
+    }
+    .scholar .avatar{
+      width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;
+      display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0
+    }
+    .scholar h4{font-size:16px; font-weight:700; margin-bottom:4px}
+    .scholar .role{font-size:12px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px}
+    .scholar p{font-size:14px; color:var(--gray); line-height:1.5}
+    .badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+    .badge{font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; background:#fff; color:var(--navy); border:1px solid var(--light-gray)}
+
+    /* Partnerships */
+    #partnerships{background:var(--navy); color:#fff}
+    #partnerships .page-label{color:var(--gold-light)}
+    .partnerships-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px}
+    .map-card{
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius); padding:36px;
+    }
+    .map-card h3{font-size:24px; font-weight:700; margin-bottom:20px}
+    .partner-list{list-style:none; display:flex; flex-direction:column; gap:14px}
+    .partner-list li{display:flex; gap:12px; align-items:flex-start; font-size:14px; opacity:.9}
+    .partner-list li::before{content:"→"; color:var(--gold); font-weight:700}
+    .cases{display:flex; flex-direction:column; gap:20px}
+    .case-card{
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius); padding:24px;
+    }
+    .case-card h4{font-size:16px; font-weight:700; margin-bottom:8px; color:var(--gold-light)}
+    .case-card p{font-size:14px; opacity:.85; line-height:1.5}
+    .case-stat{font-size:28px; font-weight:800; margin-top:12px}
+    .case-stat span{font-size:13px; font-weight:400; opacity:.7; display:block; margin-top:-4px}
+
+    /* Campuses */
+    #campuses{background:var(--offwhite)}
+    .campuses-header{text-align:center; max-width:700px; margin:0 auto 48px}
+    .campuses-header h2{font-size:clamp(28px,3.5vw,42px); font-weight:800; margin-bottom:12px}
+    .disciplines{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:48px}
+    .discipline{
+      background:#fff; border:1px solid var(--light-gray); border-radius:var(--radius);
+      padding:24px 16px; text-align:center; transition:all .2s;
+    }
+    .discipline:hover{border-color:var(--gold); transform:translateY(-3px)}
+    .discipline .rank{font-size:32px; font-weight:800; color:var(--navy); line-height:1}
+    .discipline .rank span{font-size:14px; color:var(--gold)}
+    .discipline .name{font-size:13px; font-weight:600; margin-top:10px; color:var(--navy)}
+    .discipline .src{font-size:11px; color:var(--gray); margin-top:4px}
+    .campus-trio{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+    .campus-card{
+      height:280px; border-radius:var(--radius); display:flex; align-items:flex-end; padding:24px;
+      color:#fff; position:relative; overflow:hidden;
+    }
+    .campus-card .bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center}
+    .campus-card .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.92) 100%)}
+    .campus-card > div{position:relative;z-index:1}
+    .campus-card h4{font-size:18px;font-weight:700;margin-bottom:4px}
+    .campus-card p{font-size:13px;opacity:.9}
+
+    /* Alumni */
+    #alumni{background:var(--white)}
+    .alumni-header{text-align:center; max-width:720px; margin:0 auto 40px}
+    .alumni-header h2{font-size:clamp(28px,3.5vw,42px); font-weight:800}
+    .map-placeholder{
+      background:var(--navy); border-radius:var(--radius); min-height:380px;
+      display:flex; align-items:center; justify-content:center; color:#fff; position:relative; overflow:hidden;
+      margin-bottom:40px;
+    }
+    .map-placeholder svg{width:100%; height:100%; position:absolute; opacity:.25}
+    .map-overlay{position:relative; z-index:1; text-align:center; padding:40px}
+    .map-overlay h3{font-size:32px; font-weight:800; margin-bottom:8px}
+    .map-overlay p{font-size:16px; opacity:.85}
+    .alumni-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:16px}
+    .alumni-card{
+      background:var(--offwhite); border:1px solid var(--light-gray); border-radius:var(--radius);
+      padding:18px; text-align:center;
+    }
+    .alumni-card .loc{font-size:12px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px}
+    .alumni-card .names{font-size:13px; font-weight:600; color:var(--navy); line-height:1.5}
+
+    /* CTA */
+    #cta{
+      background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+      color:#fff; text-align:center;
+    }
+    #cta h2{font-size:clamp(30px,4vw,52px); font-weight:800; margin-bottom:16px}
+    #cta .motto{
+      font-size:clamp(48px,8vw,96px); font-weight:700;
+      color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.35);
+      margin:40px 0; line-height:1;
+    }
+    #cta .motto-trans{font-size:16px; color:var(--gold-light); font-weight:500}
+    .qr-section{
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+      border-radius:var(--radius); padding:32px; max-width:360px; margin:40px auto 0;
+    }
+    .qr-section img{width:180px;height:180px;margin-bottom:16px;background:#fff;padding:10px;border-radius:8px}
+    .qr-section p{font-size:13px; opacity:.85}
+    .cta-buttons{display:flex; justify-content:center; gap:16px; margin-top:40px; flex-wrap:wrap}
+    .cta-btn{
+      padding:14px 32px; border-radius:100px; font-size:15px; font-weight:600; text-decoration:none;
+      transition:all .2s;
+    }
+    .cta-btn.primary{background:var(--gold); color:var(--navy)}
+    .cta-btn.primary:hover{background:var(--gold-light)}
+    .cta-btn.secondary{background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4)}
+    .cta-btn.secondary:hover{border-color:#fff; background:rgba(255,255,255,.08)}
+
+    /* Summer Practice */
+    #summer-practice{background:var(--white)}
+    .practice-hero{
+      display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center;
+    }
+    .practice-visual{
+      position:relative; border-radius:var(--radius); overflow:hidden; min-height:420px;
+      display:flex; align-items:flex-end; padding:32px; color:#fff;
+    }
+    .practice-visual .bg{position:absolute; inset:0; background-size:cover; background-position:center; z-index:0}
+    .practice-visual .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(0,47,108,.9) 100%)}
+    .practice-visual .overlay{position:relative; z-index:1}
+    .practice-visual .team-name{
+      display:inline-block; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+      color:var(--gold-light); margin-bottom:10px;
+    }
+    .practice-visual h3{font-size:clamp(24px,3vw,36px); font-weight:800; line-height:1.1; margin-bottom:10px}
+    .practice-visual p{font-size:14px; opacity:.9}
+    .practice-content{display:flex; flex-direction:column; gap:22px}
+    .practice-content h2{font-size:clamp(28px,3.5vw,42px); font-weight:800; margin-bottom:6px}
+    .practice-content .project-title{
+      font-size:20px; font-weight:700; color:var(--gold); margin-bottom:8px;
+    }
+    .practice-content p{font-size:15px; color:var(--gray); line-height:1.7}
+    .practice-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:8px}
+    .practice-stat{
+      background:var(--offwhite); border:1px solid var(--light-gray); border-radius:var(--radius);
+      padding:18px 12px; text-align:center;
+    }
+    .practice-stat .num{font-size:28px; font-weight:800; color:var(--navy)}
+    .practice-stat .label{font-size:12px; color:var(--gray); margin-top:4px}
+    .deliverables{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:8px}
+    .deliverable{
+      background:var(--offwhite); border:1px solid var(--light-gray); border-radius:var(--radius);
+      padding:18px 14px; text-align:center; transition:all .2s;
+    }
+    .deliverable:hover{border-color:var(--gold); transform:translateY(-3px)}
+    .deliverable .icon{font-size:24px; margin-bottom:8px}
+    .deliverable .name{font-size:13px; font-weight:600; color:var(--navy)}
+
+    /* Smooth hover animations */
+    .stat-card,.discipline,.campus-card,.alumni-card,.case-card,.deliverable,.scholar{
+      transition:transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .stat-card:hover,.discipline:hover,.campus-card:hover,.alumni-card:hover,.case-card:hover{transform:translateY(-4px); box-shadow:var(--shadow)}
+    .campus-card .bg{transition:transform .6s ease}
+    .campus-card:hover .bg{transform:scale(1.06)}
+
+    /* Interactive Globe */
+    .globe-card{
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius); padding:28px; margin-bottom:24px; position:relative;
+    }
+    .globe-card h3{font-size:20px; font-weight:700; margin-bottom:16px}
+    .globe-wrap{position:relative; width:100%; aspect-ratio:1; max-width:420px; margin:0 auto}
+    #globe-svg{width:100%; height:100%; overflow:visible}
+    .globe-bg{fill:#001a3d}
+    .globe-grid{fill:none; stroke:rgba(255,255,255,.08); stroke-width:1}
+    .globe-equator{fill:none; stroke:rgba(255,255,255,.16); stroke-width:1.5}
+    .globe-grid-group{animation:spinGrid 80s linear infinite; transform-origin:200px 200px}
+    @keyframes spinGrid{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .globe-connection{fill:none; stroke:var(--gold); stroke-width:1.4; stroke-dasharray:5 4; opacity:.55; animation:dashFlow 2.2s linear infinite}
+    @keyframes dashFlow{to{stroke-dashoffset:-18}}
+    .globe-point{fill:var(--gold); stroke:#fff; stroke-width:1.4; cursor:pointer; transition:r .25s, fill .25s, stroke-width .25s}
+    .globe-point:hover{fill:#fff; stroke:var(--gold); r:8; stroke-width:2.5}
+    .globe-center{fill:#fff; animation:centerPulse 2s infinite}
+    @keyframes centerPulse{0%,100%{opacity:.9; r:5}50%{opacity:1; r:7}}
+    @keyframes pulse{0%,100%{opacity:.85; r:4.5}50%{opacity:1; r:6.5}}
+    .globe-point:not(.globe-center){animation:pulse 2.2s infinite}
+    .globe-label{fill:#fff; font-size:9px; font-weight:600; text-anchor:middle; pointer-events:none; opacity:.9; text-shadow:0 1px 3px rgba(0,0,0,.7)}
+    .globe-tooltip{
+      position:absolute; background:rgba(255,255,255,.96); color:var(--navy);
+      padding:10px 14px; border-radius:8px; font-size:13px; font-weight:500;
+      pointer-events:none; opacity:0; transform:translateY(10px); transition:opacity .25s, transform .25s;
+      box-shadow:0 10px 30px rgba(0,0,0,.25); max-width:240px; z-index:20; border:1px solid var(--light-gray);
+    }
+    .globe-tooltip.show{opacity:1; transform:translateY(0)}
+    .globe-tooltip strong{display:block; font-size:11px; color:var(--gold); margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px}
+    .globe-tooltip small{display:block; font-size:12px; color:var(--gray); margin-top:5px; line-height:1.45}
+
+    /* Responsive */
+    @media(max-width:900px){
+      section{padding:90px 24px 50px}
+      .split,.impact-layout,.partnerships-grid,.backcover-grid,.practice-hero{grid-template-columns:1fr; gap:36px}
+      .stats-grid{grid-template-columns:1fr}
+      .disciplines{grid-template-columns:repeat(2,1fr)}
+      .campus-trio{grid-template-columns:1fr}
+      .alumni-grid{grid-template-columns:repeat(2,1fr)}
+      .impact-visual{min-height:320px}
+      .cover-logo{height:60px}
+      .practice-stats,.deliverables{grid-template-columns:repeat(2,1fr)}
+    }
+    #backcover{background:var(--navy-dark); color:#fff; min-height:auto; padding:80px 48px}
+    .backcover-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center}
+    .backcover-left .seal-big img{height:90px; width:auto; margin-bottom:24px}
+    .backcover-left h2{font-size:32px; font-weight:800; margin-bottom:16px}
+    .backcover-left p{font-size:16px; opacity:.8; line-height:1.6; max-width:420px}
+    .backcover-right{display:flex; flex-direction:column; gap:20px}
+    .contact-item{display:flex; gap:14px; align-items:center; font-size:14px; opacity:.85}
+    .contact-item strong{display:block; color:var(--gold-light); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px}
+    .footer-bottom{
+      margin-top:60px; padding-top:24px; border-top:1px solid rgba(255,255,255,.12);
+      text-align:center; font-size:12px; opacity:.6;
+    }
+
+    /* Responsive */
+    @media(max-width:900px){
+      section{padding:90px 24px 50px}
+      .split,.impact-layout,.partnerships-grid,.backcover-grid{grid-template-columns:1fr; gap:36px}
+      .stats-grid{grid-template-columns:1fr}
+      .disciplines{grid-template-columns:repeat(2,1fr)}
+      .campus-trio{grid-template-columns:1fr}
+      .alumni-grid{grid-template-columns:repeat(2,1fr)}
+      .impact-visual{min-height:320px}
+      .cover-logo{height:60px}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><img src="seu_logo.png" alt="SEU Logo"> Southeast University</div>
+  <button class="menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <div class="nav-links">
+    <a href="#intro">About</a>
+    <a href="#impact-networks">Impact</a>
+    <a href="#partnerships">Partners</a>
+    <a href="#campuses">Campuses</a>
+    <a href="#alumni">Alumni</a>
+    <a href="#summer-practice">Project</a>
+    <a href="#cta" class="nav-cta">Join SEU</a>
+  </div>
+</nav>
+
+<!-- COVER -->
+<section id="cover">
+  <div class="container">
+    <img src="seu_logo.png" alt="Southeast University" class="cover-logo">
+    <div class="cover-badge">
+      <span>⚡</span> Founded in 1902 · Nanjing, China
+    </div>
+    <h1>Southeast University:<br><span>Global Impact,<br>Rooted in China</span></h1>
+    <p class="subtitle">Where 120 years of heritage meets world-changing innovation.</p>
+    <div class="cover-meta">
+      <div><strong>120+</strong>Years of History</div>
+      <div><strong>Top 20</strong>Global Engineering</div>
+      <div><strong>30+</strong>Intl. Academicians</div>
+    </div>
+    <div class="scroll-hint">Scroll to explore ↓</div>
+  </div>
+</section>
+
+<!-- WHO WE ARE -->
+<section id="intro">
+  <div class="container">
+    <div class="split">
+      <div>
+        <div class="page-label">Who We Are</div>
+        <p class="intro-quote">
+          One of China's oldest and most influential universities. <span>A launchpad for technologies that billions use every day.</span>
+        </p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num">120<span>+</span></div>
+          <div class="label">Years of History<br>Founded 1902</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">Top 20</div>
+          <div class="label">Global Engineering &amp; Computer Science<br>ESI Rankings</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">30<span>+</span></div>
+          <div class="label">International Alumni in National Academies Worldwide</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT: NETWORKS -->
+<section id="impact-networks" class="impact-page">
+  <div class="container">
+    <div class="impact-layout">
+      <div class="impact-visual">
+        <div class="bg" style="background-image:url('nantong_optimized.jpg')"></div>
+        <div class="topic">Global Impact · 01</div>
+        <h2>The Networks You Rely On</h2>
+        <p class="tagline">The wireless standards in your smartphone were shaped by SEU researchers.</p>
+      </div>
+      <div class="scholar-list">
+        <div class="scholar">
+          <div class="avatar">Y</div>
+          <div>
+            <h4>Xiaohu You</h4>
+            <div class="role">5G/6G Pioneer</div>
+            <p>Led China's first 4G/5G standardization efforts; his team's work is embedded in global mobile communications.</p>
+            <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">CAE Academician</span></div>
+          </div>
+        </div>
+        <div class="scholar">
+          <div class="avatar">W</div>
+          <div>
+            <h4>Jiangzhou Wang</h4>
+            <div class="role">Wireless Systems</div>
+            <p>Fellow of the Royal Academy of Engineering; shaped next-generation mobile network architectures.</p>
+            <div class="badges"><span class="badge">FREng</span><span class="badge">IEEE Fellow</span></div>
+          </div>
+        </div>
+        <div class="scholar">
+          <div class="avatar">T</div>
+          <div>
+            <h4>Wen Tong</h4>
+            <div class="role">6G Visionary</div>
+            <p>Chief scientist at China's 6G R&amp;D initiatives; driving the global roadmap for beyond-5G systems.</p>
+            <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">Huawei Fellow</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT: MATERIALS -->
+<section id="impact-materials" class="impact-page">
+  <div class="container">
+    <div class="impact-layout">
+      <div class="impact-visual">
+        <div class="bg" style="background-image:url('jiulonghu_optimized.jpg')"></div>
+        <div class="topic">Global Impact · 02</div>
+        <h2>The Materials of Tomorrow</h2>
+        <p class="tagline">From molecular ferroelectrics to next-generation batteries.</p>
+      </div>
+      <div class="scholar-list">
+        <div class="scholar">
+          <div class="avatar" style="background:var(--gold);color:var(--navy)">X</div>
+          <div>
+            <h4>Ren-Gen Xiong</h4>
+            <div class="role">Molecular Ferroelectrics</div>
+            <p>His molecular ferroelectric materials are redefining flexible electronics and low-power memory devices.</p>
+            <div class="badges"><span class="badge">CAS Academician</span><span class="badge">TWAS Fellow</span></div>
+          </div>
+        </div>
+        <div class="scholar">
+          <div class="avatar" style="background:var(--gold);color:var(--navy)">W</div>
+          <div>
+            <h4>Yuping Wu</h4>
+            <div class="role">Energy Storage</div>
+            <p>Pioneering safer, higher-density batteries for electric vehicles and grid-scale storage.</p>
+            <div class="badges"><span class="badge">RSC Fellow</span><span class="badge">Highly Cited Researcher</span></div>
+          </div>
+        </div>
+        <div class="scholar">
+          <div class="avatar" style="background:var(--gold);color:var(--navy)">Y</div>
+          <div>
+            <h4>Aibing Yu</h4>
+            <div class="role">Particle Science</div>
+            <p>World-leading researcher in particle technology and process engineering; Fellow of multiple national academies.</p>
+            <div class="badges"><span class="badge">Fellow of Australian Academy</span><span class="badge">SEU-Monash Joint Institute</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT: HEALTH -->
+<section id="impact-health" class="impact-page">
+  <div class="container">
+    <div class="impact-layout">
+      <div class="impact-visual">
+        <div class="bg" style="background-image:url('intro_optimized.jpg')"></div>
+        <div class="topic">Global Impact · 03</div>
+        <h2>Health, Across Borders</h2>
+        <p class="tagline">Brain research and medical technologies adopted by labs worldwide.</p>
+      </div>
+      <div class="scholar-list">
+        <div class="scholar">
+          <div class="avatar" style="background:#fff;color:var(--navy)">Z</div>
+          <div>
+            <h4>Ping Zheng</h4>
+            <div class="role">Neuroscience</div>
+            <p>Advancing the understanding of neural circuits and neurodegenerative diseases in leading international labs.</p>
+            <div class="badges"><span class="badge">CAE Academician</span><span class="badge">Canada Research Chair Alumni</span></div>
+          </div>
+        </div>
+        <div class="scholar">
+          <div class="avatar" style="background:#fff;color:var(--navy)">P</div>
+          <div>
+            <h4>Hanchuan Peng &amp; Zhen Xu</h4>
+            <div class="role">Biomedical Engineering</div>
+            <p>AIMBE Fellows developing high-resolution brain imaging and non-invasive therapeutic ultrasound technologies.</p>
+            <div class="badges"><span class="badge">AIMBE Fellow</span><span class="badge">IEEE Fellow</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERSHIPS -->
+<section id="partnerships">
+  <div class="container">
+    <div class="page-label">Who We Partner With</div>
+    <div class="partnerships-grid">
+      <div>
+        <div class="globe-card">
+          <h3>Global Collaboration Network</h3>
+          <div class="globe-wrap">
+            <svg id="globe-svg" viewBox="0 0 400 400">
+              <defs>
+                <radialGradient id="globeGrad" cx="30%" cy="30%" r="80%">
+                  <stop offset="0%" stop-color="#003d8c"/>
+                  <stop offset="100%" stop-color="#001a3d"/>
+                </radialGradient>
+              </defs>
+              <circle cx="200" cy="200" r="190" class="globe-bg"/>
+              <clipPath id="globeClip"><circle cx="200" cy="200" r="190"/></clipPath>
+              <g clip-path="url(#globeClip)">
+                <g class="globe-grid-group">
+                  <ellipse cx="200" cy="200" rx="190" ry="55" class="globe-grid" transform="rotate(-35 200 200)"/>
+                  <ellipse cx="200" cy="200" rx="190" ry="120" class="globe-grid" transform="rotate(-35 200 200)"/>
+                  <ellipse cx="200" cy="200" rx="190" ry="170" class="globe-grid" transform="rotate(-35 200 200)"/>
+                  <ellipse cx="200" cy="200" rx="190" ry="70" class="globe-grid" transform="rotate(55 200 200)"/>
+                  <ellipse cx="200" cy="200" rx="190" ry="140" class="globe-grid" transform="rotate(55 200 200)"/>
+                  <ellipse cx="200" cy="200" rx="190" ry="190" class="globe-equator"/>
+                </g>
+                <g id="globe-connections"></g>
+                <g id="globe-points"></g>
+                <g id="globe-labels"></g>
+              </g>
+              <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+            </svg>
+            <div class="globe-tooltip" id="globe-tooltip"></div>
+          </div>
+        </div>
+        <div class="map-card">
+          <h3>Global Collaboration Network</h3>
+          <ul class="partner-list">
+            <li>Joint research institute with Monash University (Australia)</li>
+            <li>Long-term collaboration with Nobel laureate Samuel Ting on the AMS experiment</li>
+            <li>Strategic partnerships with HKUST, University of Leeds, and University of Auckland</li>
+            <li>Secretariat of the Sino-British University Engineering Education and Research Alliance</li>
+            <li>60+ countries represented by international students and scholars</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cases">
+        <div class="case-card">
+          <h4>SEU–Monash Joint Research Institute</h4>
+          <p>Co-led by Professor Aibing Yu, driving joint PhD programs and industry-facing research in advanced materials.</p>
+        </div>
+        <div class="case-card">
+          <h4>HKUST–SEU Space Robotics &amp; Energy Center</h4>
+          <p>Established in 2024 to advance lunar exploration technologies and sustainable energy systems.</p>
+        </div>
+        <div class="case-card">
+          <div class="case-stat">60+<span>Countries · ~2,000 International Students</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPUSES -->
+<section id="campuses">
+  <div class="container">
+    <div class="campuses-header">
+      <div class="page-label">What You Can Find Here</div>
+      <h2>From Historic Architecture to the Labs Defining 6G</h2>
+    </div>
+
+    <div class="disciplines">
+      <div class="discipline">
+        <div class="rank">Top 20<span>ESI</span></div>
+        <div class="name">Engineering</div>
+        <div class="src">Essential Science Indicators</div>
+      </div>
+      <div class="discipline">
+        <div class="rank">Top 16<span>ESI</span></div>
+        <div class="name">Computer Science</div>
+        <div class="src">Essential Science Indicators</div>
+      </div>
+      <div class="discipline">
+        <div class="rank">Top Tier<span>CN</span></div>
+        <div class="name">Architecture</div>
+        <div class="src">China's Leading Programs</div>
+      </div>
+      <div class="discipline">
+        <div class="rank">Top 1%<span>ESI</span></div>
+        <div class="name">Biomedical Engineering, Mathematics &amp; more</div>
+        <div class="src">Multiple disciplines ranked globally</div>
+      </div>
+    </div>
+
+    <div class="campus-trio">
+      <div class="campus-card">
+        <div class="bg" style="background-image:url('cover_optimized.jpg')"></div>
+        <div>
+          <h4>Sipailou Campus</h4>
+          <p>Historic heart of SEU — where the iconic Great Hall and century-old academic tradition stand.</p>
+        </div>
+      </div>
+      <div class="campus-card">
+        <div class="bg" style="background-image:url('jiulonghu_optimized.jpg')"></div>
+        <div>
+          <h4>Jiulonghu Campus</h4>
+          <p>A modern innovation hub spanning science, engineering, and the arts on the shores of Jiulong Lake.</p>
+        </div>
+      </div>
+      <div class="campus-card">
+        <div class="bg" style="background-image:url('intro_optimized.jpg')"></div>
+        <div>
+          <h4>Purple Mountain Laboratories</h4>
+          <p>China's frontier research base for 6G, future networks, and integrated circuits.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALUMNI -->
+<section id="alumni">
+  <div class="container">
+    <div class="alumni-header">
+      <div class="page-label">Our People, Everywhere</div>
+      <h2>SEU Graduates Lead on Every Continent</h2>
+    </div>
+
+    <div class="map-placeholder">
+      <svg viewBox="0 0 1000 500" preserveAspectRatio="none">
+        <path fill="#ffffff" d="M220,180 Q250,160 280,180 T340,180 T400,200 T460,190 T520,210 T580,200 T640,220 T700,200 T760,210 T820,190 T880,200" opacity=".3"/>
+        <circle cx="180" cy="160" r="4" fill="#C9A227"/>
+        <circle cx="820" cy="180" r="4" fill="#C9A227"/>
+        <circle cx="880" cy="240" r="4" fill="#C9A227"/>
+        <circle cx="780" cy="320" r="4" fill="#C9A227"/>
+        <circle cx="520" cy="140" r="4" fill="#C9A227"/>
+      </svg>
+      <div class="map-overlay">
+        <h3>Silicon Valley · London · Sydney · Helsinki · Vancouver · Nanjing</h3>
+        <p>SEU alumni lead in global tech hubs, teach in Europe's top universities, and build infrastructure across the world.</p>
+      </div>
+    </div>
+
+    <div class="alumni-grid">
+      <div class="alumni-card">
+        <div class="loc">Silicon Valley / Seattle</div>
+        <div class="names">Xiangyang Shen · Yong Rui</div>
+      </div>
+      <div class="alumni-card">
+        <div class="loc">London / UK</div>
+        <div class="names">Jiangzhou Wang</div>
+      </div>
+      <div class="alumni-card">
+        <div class="loc">Australia</div>
+        <div class="names">Aibing Yu</div>
+      </div>
+      <div class="alumni-card">
+        <div class="loc">Canada</div>
+        <div class="names">Zhishen Wu · Ping Zheng</div>
+      </div>
+      <div class="alumni-card">
+        <div class="loc">Finland</div>
+        <div class="names">Peter David Lund</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMER PRACTICE PROJECT -->
+<section id="summer-practice">
+  <div class="container">
+    <div class="practice-hero">
+      <div class="practice-visual">
+        <div class="bg" style="background-image:url('engagement_optimized.jpg')"></div>
+        <div class="overlay">
+          <div class="team-name">Summer Practice Team · 国际纵队</div>
+          <h3 class="chinese">至善视界</h3>
+          <p>东大青年中国声，奏响国际青春音</p>
+        </div>
+      </div>
+
+      <div class="practice-content">
+        <div class="page-label">Student-Led Initiative</div>
+        <div class="project-title">Vision of Perfection: Youth Voices of SEU, Echoed Globally</div>
+        <p>
+          We are <strong>国际纵队 (International Brigade)</strong>, a student practice team from Southeast University. Our project, <strong>"至善视界" (Vision of Perfection)</strong>, tells the SEU story to the world through the eyes of young people.
+        </p>
+        <p>
+          Through desk research and global-alumni interviews, we explored how SEU's 120-year heritage, world-leading engineering, and international partnerships shape lives across borders. We then turned these insights into a multilingual brand narrative — this brochure, short videos, and social content — designed for international audiences.
+        </p>
+
+        <div class="practice-stats">
+          <div class="practice-stat">
+            <div class="num">120+</div>
+            <div class="label">Years of SEU History Researched</div>
+          </div>
+          <div class="practice-stat">
+            <div class="num">6+</div>
+            <div class="label">Countries Covered in Alumni Stories</div>
+          </div>
+          <div class="practice-stat">
+            <div class="num">4+</div>
+            <div class="label">Deliverables Produced</div>
+          </div>
+        </div>
+
+        <h2 style="margin-top:12px">What We Created</h2>
+        <div class="deliverables">
+          <div class="deliverable">
+            <div class="icon">📖</div>
+            <div class="name">Brand Brochure</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">🎬</div>
+            <div class="name">Short Videos</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">🌐</div>
+            <div class="name">Social Content</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">📄</div>
+            <div class="name">Research Report</div>
+          </div>
+        </div>
+
+        <p style="margin-top:8px">
+          <em>"We believe the best way to introduce SEU to the world is through authentic stories — of researchers, alumni, and the city of Nanjing — told by the young generation that will carry them forward."</em>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <div class="page-label" style="color:var(--gold-light)">Join the Network</div>
+    <h2>Be Part of the Next Century of Impact</h2>
+    <p style="font-size:18px; opacity:.85; max-width:620px; margin:0 auto">
+      Whether you are a prospective student, a research partner, or a global institution, SEU offers a gateway to innovation that begins in Nanjing and reaches the world.
+    </p>
+
+    <div class="motto chinese">止于至善</div>
+    <div class="motto-trans">Striving for Perfection</div>
+
+    <div class="qr-section">
+      <img src="seu_brochure_qr.png" alt="Scan to view SEU brochure online">
+      <p>Scan this QR code to explore the digital version of this brochure.</p>
+    </div>
+
+    <div class="cta-buttons">
+      <a class="cta-btn primary" href="https://www.seu.edu.cn/english/" target="_blank">Visit SEU Official Site →</a>
+      <a class="cta-btn secondary" href="https://www.seu.edu.cn/english/2026/0403/c65351a560816/page.htm" target="_blank">Year of Global Engagement</a>
+    </div>
+  </div>
+</section>
+
+<!-- BACK COVER -->
+<section id="backcover">
+  <div class="container">
+    <div class="backcover-grid">
+      <div class="backcover-left">
+        <div class="seal-big"><img src="seu_logo.png" alt="SEU Logo"></div>
+        <h2>Southeast University</h2>
+        <p><strong>China's heritage. The world's future.</strong></p>
+        <p style="margin-top:12px">Founded in 1902 in Nanjing, SEU continues to transform fundamental science into technologies that improve lives across the globe.</p>
+      </div>
+      <div class="backcover-right">
+        <div class="contact-item">
+          <div>
+            <strong>International Admissions</strong>
+            admission@seu.edu.cn · www.seu.edu.cn/english
+          </div>
+        </div>
+        <div class="contact-item">
+          <div>
+            <strong>Global Partnerships</strong>
+            international@seu.edu.cn
+          </div>
+        </div>
+        <div class="contact-item">
+          <div>
+            <strong>Follow SEU</strong>
+            WeChat · LinkedIn · X/Twitter · YouTube
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © Southeast University · No. 2 Sipailou, Nanjing 210096, China · Brand Communications Brochure 2025
+      <br><br>
+      <span style="color:var(--gold-light)">暑期实践 · 国际纵队 · 至善视界 — 东大青年中国声，奏响国际青春音</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.querySelector('.nav-links').classList.remove('open');
+    });
+  });
+
+  // Interactive Globe
+  (function(){
+    var R = 175;
+    var cx = 200, cy = 200;
+    var center = {name:'Southeast University', region:'Nanjing, China', lat:32.06, lon:118.78, type:'Home Campus', desc:'The heart of the SEU global network.'};
+    var partners = [
+      {name:'Monash University', region:'Melbourne, Australia', lat:-37.81, lon:144.96, type:'Joint Research Institute', desc:'Joint PhD programs and advanced materials research with Professor Aibing Yu.'},
+      {name:'CERN / AMS Experiment', region:'Geneva, Switzerland', lat:46.23, lon:6.05, type:'Fundamental Science', desc:'Long-term collaboration with Nobel laureate Samuel Ting on the Alpha Magnetic Spectrometer.'},
+      {name:'HKUST', region:'Hong Kong, China', lat:22.32, lon:114.17, type:'Space & Energy Center', desc:'HKUST–SEU Space Robotics & Energy Center, established in 2024.'},
+      {name:'University of Leeds', region:'Leeds, UK', lat:53.81, lon:-1.55, type:'Strategic Partner', desc:'Member of the Sino-British University Engineering Education and Research Alliance.'},
+      {name:'University of Auckland', region:'Auckland, New Zealand', lat:-36.85, lon:174.76, type:'Strategic Partner', desc:'Joint research and student exchange across engineering and science.'}
+    ];
+
+    function toRad(d){return d*Math.PI/180;}
+    function project(lat, lon){
+      var lat0 = toRad(center.lat), lon0 = toRad(center.lon);
+      var latr = toRad(lat), lonr = toRad(lon);
+      var x = Math.cos(latr)*Math.cos(lonr);
+      var y = Math.cos(latr)*Math.sin(lonr);
+      var z = Math.sin(latr);
+      var x1 = x*Math.cos(-lon0) - y*Math.sin(-lon0);
+      var y1 = x*Math.sin(-lon0) + y*Math.cos(-lon0);
+      var y2 = y1*Math.cos(lat0) - z*Math.sin(lat0);
+      var z2 = y1*Math.sin(lat0) + z*Math.cos(lat0);
+      return {x: cx + x1*R, y: cy + y2*R, visible: z2 > -0.15};
+    }
+
+    var connGroup = document.getElementById('globe-connections');
+    var pointGroup = document.getElementById('globe-points');
+    var labelGroup = document.getElementById('globe-labels');
+    var tooltip = document.getElementById('globe-tooltip');
+
+    function showTooltip(e, d){
+      tooltip.innerHTML = '<strong>' + d.type + '</strong>' + d.name + ' · ' + d.region + '<small>' + d.desc + '</small>';
+      tooltip.classList.add('show');
+      moveTooltip(e);
+    }
+    function moveTooltip(e){
+      var rect = document.getElementById('globe-svg').getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      tooltip.style.left = Math.min(x + 12, rect.width - 220) + 'px';
+      tooltip.style.top = Math.max(y - 12, 0) + 'px';
+    }
+    function hideTooltip(){tooltip.classList.remove('show');}
+
+    function makePoint(d, isCenter){
+      var p = project(d.lat, d.lon);
+      if(!p.visible && !isCenter) return null;
+      var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circle.setAttribute('cx', p.x.toFixed(1));
+      circle.setAttribute('cy', p.y.toFixed(1));
+      circle.setAttribute('r', isCenter ? '5' : '4.5');
+      circle.setAttribute('class', isCenter ? 'globe-point globe-center' : 'globe-point');
+      circle.addEventListener('mouseenter', function(e){showTooltip(e, d);});
+      circle.addEventListener('mousemove', moveTooltip);
+      circle.addEventListener('mouseleave', hideTooltip);
+      return {el:circle, p:p, data:d};
+    }
+
+    var cp = makePoint(center, true);
+    pointGroup.appendChild(cp.el);
+
+    partners.forEach(function(partner){
+      var obj = makePoint(partner, false);
+      if(!obj) return;
+      pointGroup.appendChild(obj.el);
+      var dPath = 'M ' + cp.p.x.toFixed(1) + ' ' + cp.p.y.toFixed(1);
+      var mx = (cp.p.x + obj.p.x)/2;
+      var my = (cp.p.y + obj.p.y)/2;
+      var dx = obj.p.x - cp.p.x;
+      var dy = obj.p.y - cp.p.y;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var perp = 25 + dist*0.15;
+      var cxq = mx - dy/dist*perp;
+      var cyq = my + dx/dist*perp;
+      dPath += ' Q ' + cxq.toFixed(1) + ' ' + cyq.toFixed(1) + ' ' + obj.p.x.toFixed(1) + ' ' + obj.p.y.toFixed(1);
+      var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d', dPath);
+      path.setAttribute('class', 'globe-connection');
+      connGroup.appendChild(path);
+      var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+      lbl.setAttribute('x', obj.p.x.toFixed(1));
+      lbl.setAttribute('y', (obj.p.y + 16).toFixed(1));
+      lbl.setAttribute('class', 'globe-label');
+      lbl.textContent = partner.name.split(' ')[0];
+      labelGroup.appendChild(lbl);
+    });
+  })();
+</script>
+
+</body>
+</html>
