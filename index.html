@@ -90,13 +90,14 @@
     /* Intro — with 六朝松 background */
     #intro{background:var(--white); position:relative; overflow:hidden}
     .pine-bg{
-      position:absolute; right:-40px; bottom:-40px; z-index:0;
-      width:440px; height:520px; opacity:.85; pointer-events:none;
-      animation:pineBreathe 7s ease-in-out infinite;
+      position:absolute; right:0; bottom:-60px; z-index:0;
+      width:300px; height:auto; pointer-events:none;
+      filter:brightness(0) saturate(0);
+      animation:pineBreathe 8s ease-in-out infinite;
     }
     @keyframes pineBreathe{
-      0%,100%{opacity:.7; transform:scale(1) rotate(0deg)}
-      50%{opacity:.95; transform:scale(1.03) rotate(.5deg)}
+      0%,100%{opacity:.30; transform:scale(1)}
+      50%{opacity:.50; transform:scale(1.03)}
     }
     #intro .container{position:relative; z-index:1}
     .split{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center}
@@ -610,35 +611,8 @@
 
 <!-- WHO WE ARE -->
 <section id="intro">
-  <!-- 六朝松 — Six Dynasties Pine, ancient symbol of SEU since 1902 -->
-  <svg class="pine-bg" viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="pineTrunk" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(0,47,108,.10)"/>
-        <stop offset="100%" stop-color="rgba(0,47,108,.04)"/>
-      </linearGradient>
-      <linearGradient id="pineNeedle" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(0,47,108,.12)"/>
-        <stop offset="100%" stop-color="rgba(0,47,108,.03)"/>
-      </linearGradient>
-    </defs>
-    <!-- Trunk -->
-    <path d="M208,520 Q210,420 212,380 Q214,340 210,300 Q206,260 208,220 Q210,180 212,140"
-          stroke="url(#pineTrunk)" stroke-width="12" fill="none" stroke-linecap="round"/>
-    <path d="M212,380 Q195,370 175,360" stroke="url(#pineTrunk)" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <path d="M210,300 Q225,280 240,270" stroke="url(#pineTrunk)" stroke-width="4" fill="none" stroke-linecap="round"/>
-    <!-- Canopy layers — ancient pine cloud-shaped crown -->
-    <ellipse cx="210" cy="140" rx="90" ry="45" fill="url(#pineNeedle)" opacity=".8"/>
-    <ellipse cx="180" cy="170" rx="70" ry="35" fill="url(#pineNeedle)" opacity=".7"/>
-    <ellipse cx="240" cy="185" rx="60" ry="32" fill="url(#pineNeedle)" opacity=".65"/>
-    <ellipse cx="160" cy="210" rx="75" ry="38" fill="url(#pineNeedle)" opacity=".6"/>
-    <ellipse cx="250" cy="230" rx="55" ry="30" fill="url(#pineNeedle)" opacity=".5"/>
-    <ellipse cx="195" cy="250" rx="80" ry="35" fill="url(#pineNeedle)" opacity=".45"/>
-    <ellipse cx="230" cy="280" rx="50" ry="28" fill="url(#pineNeedle)" opacity=".35"/>
-    <ellipse cx="175" cy="290" rx="60" ry="30" fill="url(#pineNeedle)" opacity=".3"/>
-    <!-- Ground / roots hint -->
-    <path d="M150,520 Q170,500 208,510 Q250,500 280,520" stroke="rgba(0,47,108,.05)" stroke-width="2" fill="none"/>
-  </svg>
+  <!-- 六朝松 — SEU official visual identity symbol (from seu-vis.html) -->
+  <img class="pine-bg" src="liuchaosong.svg" alt="六朝松">
   <div class="container">
     <div class="split">
       <div>
