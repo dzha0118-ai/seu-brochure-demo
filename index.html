@@ -87,8 +87,18 @@
     .scroll-hint{position:absolute; bottom:30px; left:50%; transform:translateX(-50%); font-size:12px; opacity:.7; animation:bounce 2s infinite; z-index:2}
     @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
 
-    /* Intro */
-    #intro{background:var(--white)}
+    /* Intro — with 六朝松 background */
+    #intro{background:var(--white); position:relative; overflow:hidden}
+    .pine-bg{
+      position:absolute; right:-40px; bottom:-40px; z-index:0;
+      width:440px; height:520px; opacity:.85; pointer-events:none;
+      animation:pineBreathe 7s ease-in-out infinite;
+    }
+    @keyframes pineBreathe{
+      0%,100%{opacity:.7; transform:scale(1) rotate(0deg)}
+      50%{opacity:.95; transform:scale(1.03) rotate(.5deg)}
+    }
+    #intro .container{position:relative; z-index:1}
     .split{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center}
     .intro-quote{font-size:clamp(24px,3vw,36px); font-weight:700; line-height:1.3; color:var(--navy)}
     .intro-quote span{color:var(--gold)}
@@ -275,37 +285,85 @@
     .campus-card .bg{transition:transform .6s ease}
     .campus-card:hover .bg{transform:scale(1.06)}
 
-    /* Interactive Globe */
+    /* Interactive D3 Globe — inspired by Stripe / Globestudio / deck.gl */
     .globe-card{
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-      border-radius:var(--radius); padding:28px; margin-bottom:24px; position:relative;
+      border-radius:var(--radius); padding:28px; position:relative;
+      overflow:hidden;
     }
-    .globe-card h3{font-size:20px; font-weight:700; margin-bottom:16px}
-    .globe-wrap{position:relative; width:100%; aspect-ratio:1; max-width:420px; margin:0 auto}
-    #globe-svg{width:100%; height:100%; overflow:visible}
-    .globe-bg{fill:#001a3d}
-    .globe-grid{fill:none; stroke:rgba(255,255,255,.08); stroke-width:1}
-    .globe-equator{fill:none; stroke:rgba(255,255,255,.16); stroke-width:1.5}
-    .globe-grid-group{animation:spinGrid 80s linear infinite; transform-origin:200px 200px}
-    @keyframes spinGrid{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    .globe-connection{fill:none; stroke:var(--gold); stroke-width:1.4; stroke-dasharray:5 4; opacity:.55; animation:dashFlow 2.2s linear infinite}
-    @keyframes dashFlow{to{stroke-dashoffset:-18}}
-    .globe-point{fill:var(--gold); stroke:#fff; stroke-width:1.4; cursor:pointer; transition:r .25s, fill .25s, stroke-width .25s}
-    .globe-point:hover{fill:#fff; stroke:var(--gold); r:8; stroke-width:2.5}
-    .globe-center{fill:#fff; animation:centerPulse 2s infinite}
-    @keyframes centerPulse{0%,100%{opacity:.9; r:5}50%{opacity:1; r:7}}
-    @keyframes pulse{0%,100%{opacity:.85; r:4.5}50%{opacity:1; r:6.5}}
-    .globe-point:not(.globe-center){animation:pulse 2.2s infinite}
-    .globe-label{fill:#fff; font-size:9px; font-weight:600; text-anchor:middle; pointer-events:none; opacity:.9; text-shadow:0 1px 3px rgba(0,0,0,.7)}
+    .globe-card h3{font-size:20px; font-weight:700; margin-bottom:6px}
+    .globe-subtitle{font-size:13px; opacity:.75; margin-bottom:14px}
+    .globe-wrap{position:relative; width:100%; aspect-ratio:1; max-width:480px; margin:0 auto}
+    #globe-svg{width:100%; height:100%; overflow:visible; cursor:grab}
+    #globe-svg:active{cursor:grabbing}
+    /* Starfield background */
+    .globe-star{fill:#fff; opacity:0; animation:starTwinkle 3s ease-in-out infinite}
+    @keyframes starTwinkle{0%,100%{opacity:.15}50%{opacity:.55}}
+    /* Ocean & atmosphere */
+    .globe-ocean{fill:url(#globeOcean)}
+    .globe-atmosphere-outer{fill:none; stroke:url(#atmOuterGrad); stroke-width:8; pointer-events:none; opacity:.6}
+    .globe-atmosphere-inner{fill:url(#globeAtmosphere); pointer-events:none}
+    .globe-graticule{fill:none; stroke:rgba(255,255,255,.12); stroke-width:.7; pointer-events:none}
+    .globe-sphere{fill:none; stroke:rgba(201,162,39,.45); stroke-width:1.8; pointer-events:none}
+    /* Country polygons */
+    .globe-country{
+      fill:rgba(255,255,255,.13); stroke:rgba(255,255,255,.22); stroke-width:.6;
+      transition:fill .3s, filter .3s; cursor:pointer;
+    }
+    .globe-country:hover{
+      fill:rgba(201,162,39,.45);
+      filter:drop-shadow(0 0 8px rgba(201,162,39,.5));
+    }
+    /* Partner arcs — with animated dash flow */
+    .globe-arc{
+      fill:none; stroke:var(--gold); stroke-width:2; stroke-dasharray:6 5;
+      opacity:.9; pointer-events:none; animation:arcFlow 1.8s linear infinite;
+      filter:url(#arcGlow);
+    }
+    .globe-arc:hover~.globe-point{fill:#fff}
+    /* Global node arcs — thinner, cooler blue */
+    .globe-node-arc{
+      fill:none; stroke:#6db3ff; stroke-width:1.2; stroke-dasharray:3 4;
+      opacity:.45; pointer-events:none; animation:arcFlow 3.5s linear infinite;
+    }
+    @keyframes arcFlow{to{stroke-dashoffset:-22}}
+    /* Partner points */
+    .globe-point{
+      fill:var(--gold); stroke:#fff; stroke-width:1.8; cursor:pointer;
+      transition:r .25s, fill .25s, stroke-width .25s, filter .25s;
+      filter:url(#pointGlow);
+    }
+    .globe-point:hover{fill:#fff; stroke:var(--gold); r:9; stroke-width:3; filter:url(#pointGlowHover)}
+    .globe-center{fill:#fff; stroke:var(--gold); stroke-width:2.5; filter:url(#pointGlow)}
+    /* Global nodes */
+    .globe-node{
+      fill:#6db3ff; stroke:#fff; stroke-width:1.4; cursor:pointer;
+      transition:r .25s, fill .25s; filter:url(#nodeGlow);
+    }
+    .globe-node:hover{fill:#fff; stroke:#6db3ff; r:7; stroke-width:2.5}
+    /* Pulse animations */
+    .globe-pulse{fill:none; stroke:var(--gold); stroke-width:1.2; opacity:.6; pointer-events:none; animation:ringPulse 2s ease-out infinite}
+    .globe-node-pulse{fill:none; stroke:#6db3ff; stroke-width:.9; opacity:.4; pointer-events:none; animation:nodePulse 2.6s ease-out infinite}
+    @keyframes ringPulse{0%{r:5; opacity:.6; stroke-width:1.5}100%{r:26; opacity:0; stroke-width:.2}}
+    @keyframes nodePulse{0%{r:3; opacity:.45; stroke-width:1}100%{r:16; opacity:0; stroke-width:.1}}
+    /* Labels */
+    .globe-label{fill:#fff; font-size:9px; font-weight:600; text-anchor:middle; pointer-events:none; opacity:.92; text-shadow:0 1px 6px rgba(0,0,0,.9); transition:opacity .3s}
+    .globe-node-label{fill:#b8d9ff; font-size:8px; font-weight:500; text-anchor:middle; pointer-events:none; opacity:.78; text-shadow:0 1px 5px rgba(0,0,0,.85); transition:opacity .3s}
+    /* Tooltip */
     .globe-tooltip{
-      position:absolute; background:rgba(255,255,255,.96); color:var(--navy);
+      position:absolute; background:rgba(255,255,255,.97); color:var(--navy);
       padding:10px 14px; border-radius:8px; font-size:13px; font-weight:500;
-      pointer-events:none; opacity:0; transform:translateY(10px); transition:opacity .25s, transform .25s;
-      box-shadow:0 10px 30px rgba(0,0,0,.25); max-width:240px; z-index:20; border:1px solid var(--light-gray);
+      pointer-events:none; opacity:0; transform:translateY(10px); transition:opacity .22s, transform .22s;
+      box-shadow:0 10px 30px rgba(0,0,0,.3); max-width:240px; z-index:20; border:1px solid var(--light-gray);
     }
     .globe-tooltip.show{opacity:1; transform:translateY(0)}
     .globe-tooltip strong{display:block; font-size:11px; color:var(--gold); margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px}
     .globe-tooltip small{display:block; font-size:12px; color:var(--gray); margin-top:5px; line-height:1.45}
+    .globe-drag-hint{font-size:11px; opacity:.55; text-align:center; margin-top:8px; letter-spacing:.3px}
+    .globe-stats{display:flex; justify-content:center; gap:24px; margin-top:18px; flex-wrap:wrap}
+    .globe-stat{text-align:center}
+    .globe-stat .num{font-size:22px; font-weight:800; color:var(--gold-light)}
+    .globe-stat .txt{font-size:11px; opacity:.75; text-transform:uppercase; letter-spacing:.5px}
 
     /* Responsive */
     @media(max-width:900px){
@@ -352,11 +410,11 @@
   <button class="menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
   <div class="nav-links">
     <a href="#intro">About</a>
-    <a href="#impact-networks">Impact</a>
+    <a href="#summer-practice">Project</a>
     <a href="#partnerships">Partners</a>
+    <a href="#impact-networks">Impact</a>
     <a href="#campuses">Campuses</a>
     <a href="#alumni">Alumni</a>
-    <a href="#summer-practice">Project</a>
     <a href="#cta" class="nav-cta">Join SEU</a>
   </div>
 </nav>
@@ -379,8 +437,208 @@
   </div>
 </section>
 
+<section id="summer-practice">
+  <div class="container">
+    <div class="practice-hero">
+      <div class="practice-visual">
+        <div class="bg" style="background-image:url('engagement_optimized.jpg')"></div>
+        <div class="overlay">
+          <div class="team-name">Summer Practice Team · 国际纵队</div>
+          <h3 class="chinese">至善视界</h3>
+          <p>东大青年中国声，奏响国际青春音</p>
+        </div>
+      </div>
+
+      <div class="practice-content">
+        <div class="page-label">Student-Led Initiative</div>
+        <div class="project-title">Vision of Perfection: Youth Voices of SEU, Echoed Globally</div>
+        <p>
+          We are <strong>国际纵队 (International Brigade)</strong>, a student practice team from Southeast University. Our project, <strong>"至善视界" (Vision of Perfection)</strong>, tells the SEU story to the world through the eyes of young people.
+        </p>
+        <p>
+          Through desk research and global-alumni interviews, we explored how SEU's 120-year heritage, world-leading engineering, and international partnerships shape lives across borders. We then turned these insights into a multilingual brand narrative — this brochure, short videos, and social content — designed for international audiences.
+        </p>
+
+        <div class="practice-stats">
+          <div class="practice-stat">
+            <div class="num">120+</div>
+            <div class="label">Years of SEU History Researched</div>
+          </div>
+          <div class="practice-stat">
+            <div class="num">6+</div>
+            <div class="label">Countries Covered in Alumni Stories</div>
+          </div>
+          <div class="practice-stat">
+            <div class="num">4+</div>
+            <div class="label">Deliverables Produced</div>
+          </div>
+        </div>
+
+        <h2 style="margin-top:12px">What We Created</h2>
+        <div class="deliverables">
+          <div class="deliverable">
+            <div class="icon">📖</div>
+            <div class="name">Brand Brochure</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">🎬</div>
+            <div class="name">Short Videos</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">🌐</div>
+            <div class="name">Social Content</div>
+          </div>
+          <div class="deliverable">
+            <div class="icon">📄</div>
+            <div class="name">Research Report</div>
+          </div>
+        </div>
+
+        <p style="margin-top:8px">
+          <em>"We believe the best way to introduce SEU to the world is through authentic stories — of researchers, alumni, and the city of Nanjing — told by the young generation that will carry them forward."</em>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PARTNERSHIPS -->
+<section id="partnerships">
+  <div class="container">
+    <div class="page-label">Who We Partner With</div>
+    <div class="partnerships-grid">
+      <div>
+        <div class="globe-card">
+          <h3>Global Collaboration Network</h3>
+          <div class="globe-subtitle">160+ partners across 45+ countries · Drag to rotate</div>
+          <div class="globe-wrap">
+            <svg id="globe-svg" viewBox="0 0 480 480">
+              <defs>
+                <radialGradient id="globeOcean" cx="35%" cy="30%" r="85%">
+                  <stop offset="0%" stop-color="#0d5db8"/>
+                  <stop offset="50%" stop-color="#003580"/>
+                  <stop offset="85%" stop-color="#001845"/>
+                  <stop offset="100%" stop-color="#000d28"/>
+                </radialGradient>
+                <radialGradient id="globeAtmosphere" cx="50%" cy="50%" r="50%">
+                  <stop offset="75%" stop-color="rgba(201,162,39,0)"/>
+                  <stop offset="90%" stop-color="rgba(201,162,39,.12)"/>
+                  <stop offset="97%" stop-color="rgba(201,162,39,.25)"/>
+                  <stop offset="100%" stop-color="rgba(201,162,39,0)"/>
+                </radialGradient>
+                <linearGradient id="atmOuterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(201,162,39,.08)"/>
+                  <stop offset="50%" stop-color="rgba(138,180,248,.05)"/>
+                  <stop offset="100%" stop-color="rgba(201,162,39,.08)"/>
+                </linearGradient>
+                <filter id="pointGlow" x="-150%" y="-150%" width="400%" height="400%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="pointGlowHover" x="-150%" y="-150%" width="400%" height="400%">
+                  <feGaussianBlur stdDeviation="5" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="nodeGlow" x="-150%" y="-150%" width="400%" height="400%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="arcGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <!-- Starfield background -->
+              <g id="globe-stars"></g>
+              <!-- Ocean base -->
+              <circle cx="240" cy="240" r="220" class="globe-ocean"/>
+              <!-- Outer atmosphere ring -->
+              <circle cx="240" cy="240" r="222" class="globe-atmosphere-outer"/>
+              <circle cx="240" cy="240" r="224" class="globe-atmosphere-inner"/>
+              <clipPath id="globeClip"><circle cx="240" cy="240" r="220"/></clipPath>
+              <g clip-path="url(#globeClip)">
+                <g id="globe-countries"></g>
+                <path id="globe-graticule" class="globe-graticule"></path>
+                <g id="globe-arcs"></g>
+                <g id="globe-pulses"></g>
+                <g id="globe-points"></g>
+                <g id="globe-labels"></g>
+              </g>
+              <circle cx="240" cy="240" r="220" class="globe-sphere"/>
+            </svg>
+            <div class="globe-tooltip" id="globe-tooltip"></div>
+          </div>
+          <div class="globe-drag-hint">Drag the globe · Scroll to zoom · Hover nodes for details</div>
+          <div class="globe-stats">
+            <div class="globe-stat"><div class="num">160+</div><div class="txt">Partner Institutions</div></div>
+            <div class="globe-stat"><div class="num">45+</div><div class="txt">Countries &amp; Regions</div></div>
+            <div class="globe-stat"><div class="num">~2,000</div><div class="txt">Intl Students</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="map-card">
+          <h3>Cooperation Programs</h3>
+          <ul class="partner-list">
+            <li>SEU–Monash Joint Graduate School (Suzhou) — joint PhD programs &amp; advanced materials</li>
+            <li>HKUST–SEU Space Robotics &amp; Energy Center — lunar exploration &amp; sustainable energy</li>
+            <li>China-Indonesia College of Elite Engineers — university-enterprise talent model</li>
+            <li>Secretariat of Sino-British University Engineering Education &amp; Research Alliance</li>
+            <li>160+ partner institutions across 45+ countries — Cambridge, MIT, ETH Zurich, NUS…</li>
+          </ul>
+        </div>
+        <div class="cases">
+        <div class="case-card">
+          <h4>SEU–Monash Joint Graduate School</h4>
+          <p>Co-led by Prof. Aibing Yu (Fellow of Australian Academy). Joint PhD programs in advanced materials, energy and transportation.</p>
+        </div>
+        <div class="case-card">
+          <h4>Sino-British Engineering Education Alliance</h4>
+          <p>SEU serves as Secretariat. Member institutions include Cambridge, Imperial, Leeds, Edinburgh, Birmingham and more.</p>
+        </div>
+        <div class="case-card">
+          <div class="case-stat">24<span>International Research Platforms · 20 Countries · 60+ Universities</span></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- WHO WE ARE -->
 <section id="intro">
+  <!-- 六朝松 — Six Dynasties Pine, ancient symbol of SEU since 1902 -->
+  <svg class="pine-bg" viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="pineTrunk" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(0,47,108,.10)"/>
+        <stop offset="100%" stop-color="rgba(0,47,108,.04)"/>
+      </linearGradient>
+      <linearGradient id="pineNeedle" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(0,47,108,.12)"/>
+        <stop offset="100%" stop-color="rgba(0,47,108,.03)"/>
+      </linearGradient>
+    </defs>
+    <!-- Trunk -->
+    <path d="M208,520 Q210,420 212,380 Q214,340 210,300 Q206,260 208,220 Q210,180 212,140"
+          stroke="url(#pineTrunk)" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M212,380 Q195,370 175,360" stroke="url(#pineTrunk)" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M210,300 Q225,280 240,270" stroke="url(#pineTrunk)" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Canopy layers — ancient pine cloud-shaped crown -->
+    <ellipse cx="210" cy="140" rx="90" ry="45" fill="url(#pineNeedle)" opacity=".8"/>
+    <ellipse cx="180" cy="170" rx="70" ry="35" fill="url(#pineNeedle)" opacity=".7"/>
+    <ellipse cx="240" cy="185" rx="60" ry="32" fill="url(#pineNeedle)" opacity=".65"/>
+    <ellipse cx="160" cy="210" rx="75" ry="38" fill="url(#pineNeedle)" opacity=".6"/>
+    <ellipse cx="250" cy="230" rx="55" ry="30" fill="url(#pineNeedle)" opacity=".5"/>
+    <ellipse cx="195" cy="250" rx="80" ry="35" fill="url(#pineNeedle)" opacity=".45"/>
+    <ellipse cx="230" cy="280" rx="50" ry="28" fill="url(#pineNeedle)" opacity=".35"/>
+    <ellipse cx="175" cy="290" rx="60" ry="30" fill="url(#pineNeedle)" opacity=".3"/>
+    <!-- Ground / roots hint -->
+    <path d="M150,520 Q170,500 208,510 Q250,500 280,520" stroke="rgba(0,47,108,.05)" stroke-width="2" fill="none"/>
+  </svg>
   <div class="container">
     <div class="split">
       <div>
@@ -527,71 +785,6 @@
   </div>
 </section>
 
-<!-- PARTNERSHIPS -->
-<section id="partnerships">
-  <div class="container">
-    <div class="page-label">Who We Partner With</div>
-    <div class="partnerships-grid">
-      <div>
-        <div class="globe-card">
-          <h3>Global Collaboration Network</h3>
-          <div class="globe-wrap">
-            <svg id="globe-svg" viewBox="0 0 400 400">
-              <defs>
-                <radialGradient id="globeGrad" cx="30%" cy="30%" r="80%">
-                  <stop offset="0%" stop-color="#003d8c"/>
-                  <stop offset="100%" stop-color="#001a3d"/>
-                </radialGradient>
-              </defs>
-              <circle cx="200" cy="200" r="190" class="globe-bg"/>
-              <clipPath id="globeClip"><circle cx="200" cy="200" r="190"/></clipPath>
-              <g clip-path="url(#globeClip)">
-                <g class="globe-grid-group">
-                  <ellipse cx="200" cy="200" rx="190" ry="55" class="globe-grid" transform="rotate(-35 200 200)"/>
-                  <ellipse cx="200" cy="200" rx="190" ry="120" class="globe-grid" transform="rotate(-35 200 200)"/>
-                  <ellipse cx="200" cy="200" rx="190" ry="170" class="globe-grid" transform="rotate(-35 200 200)"/>
-                  <ellipse cx="200" cy="200" rx="190" ry="70" class="globe-grid" transform="rotate(55 200 200)"/>
-                  <ellipse cx="200" cy="200" rx="190" ry="140" class="globe-grid" transform="rotate(55 200 200)"/>
-                  <ellipse cx="200" cy="200" rx="190" ry="190" class="globe-equator"/>
-                </g>
-                <g id="globe-connections"></g>
-                <g id="globe-points"></g>
-                <g id="globe-labels"></g>
-              </g>
-              <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
-            </svg>
-            <div class="globe-tooltip" id="globe-tooltip"></div>
-          </div>
-        </div>
-        <div class="map-card">
-          <h3>Global Collaboration Network</h3>
-          <ul class="partner-list">
-            <li>Joint research institute with Monash University (Australia)</li>
-            <li>Long-term collaboration with Nobel laureate Samuel Ting on the AMS experiment</li>
-            <li>Strategic partnerships with HKUST, University of Leeds, and University of Auckland</li>
-            <li>Secretariat of the Sino-British University Engineering Education and Research Alliance</li>
-            <li>60+ countries represented by international students and scholars</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="cases">
-        <div class="case-card">
-          <h4>SEU–Monash Joint Research Institute</h4>
-          <p>Co-led by Professor Aibing Yu, driving joint PhD programs and industry-facing research in advanced materials.</p>
-        </div>
-        <div class="case-card">
-          <h4>HKUST–SEU Space Robotics &amp; Energy Center</h4>
-          <p>Established in 2024 to advance lunar exploration technologies and sustainable energy systems.</p>
-        </div>
-        <div class="case-card">
-          <div class="case-stat">60+<span>Countries · ~2,000 International Students</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CAMPUSES -->
 <section id="campuses">
   <div class="container">
@@ -697,72 +890,6 @@
   </div>
 </section>
 
-<!-- SUMMER PRACTICE PROJECT -->
-<section id="summer-practice">
-  <div class="container">
-    <div class="practice-hero">
-      <div class="practice-visual">
-        <div class="bg" style="background-image:url('engagement_optimized.jpg')"></div>
-        <div class="overlay">
-          <div class="team-name">Summer Practice Team · 国际纵队</div>
-          <h3 class="chinese">至善视界</h3>
-          <p>东大青年中国声，奏响国际青春音</p>
-        </div>
-      </div>
-
-      <div class="practice-content">
-        <div class="page-label">Student-Led Initiative</div>
-        <div class="project-title">Vision of Perfection: Youth Voices of SEU, Echoed Globally</div>
-        <p>
-          We are <strong>国际纵队 (International Brigade)</strong>, a student practice team from Southeast University. Our project, <strong>"至善视界" (Vision of Perfection)</strong>, tells the SEU story to the world through the eyes of young people.
-        </p>
-        <p>
-          Through desk research and global-alumni interviews, we explored how SEU's 120-year heritage, world-leading engineering, and international partnerships shape lives across borders. We then turned these insights into a multilingual brand narrative — this brochure, short videos, and social content — designed for international audiences.
-        </p>
-
-        <div class="practice-stats">
-          <div class="practice-stat">
-            <div class="num">120+</div>
-            <div class="label">Years of SEU History Researched</div>
-          </div>
-          <div class="practice-stat">
-            <div class="num">6+</div>
-            <div class="label">Countries Covered in Alumni Stories</div>
-          </div>
-          <div class="practice-stat">
-            <div class="num">4+</div>
-            <div class="label">Deliverables Produced</div>
-          </div>
-        </div>
-
-        <h2 style="margin-top:12px">What We Created</h2>
-        <div class="deliverables">
-          <div class="deliverable">
-            <div class="icon">📖</div>
-            <div class="name">Brand Brochure</div>
-          </div>
-          <div class="deliverable">
-            <div class="icon">🎬</div>
-            <div class="name">Short Videos</div>
-          </div>
-          <div class="deliverable">
-            <div class="icon">🌐</div>
-            <div class="name">Social Content</div>
-          </div>
-          <div class="deliverable">
-            <div class="icon">📄</div>
-            <div class="name">Research Report</div>
-          </div>
-        </div>
-
-        <p style="margin-top:8px">
-          <em>"We believe the best way to introduce SEU to the world is through authentic stories — of researchers, alumni, and the city of Nanjing — told by the young generation that will carry them forward."</em>
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA -->
 <section id="cta">
   <div class="container">
@@ -826,7 +953,8 @@
     </div>
   </div>
 </section>
-
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 <script>
   document.querySelectorAll('.nav-links a').forEach(function(a){
     a.addEventListener('click', function(){
@@ -834,96 +962,292 @@
     });
   });
 
-  // Interactive Globe
+  // ─── Interactive D3 Globe — Real World Map + Starfield ───
+  // Design references: Stripe Globe · Globestudio · deck.gl arc diagrams
   (function(){
-    var R = 175;
-    var cx = 200, cy = 200;
-    var center = {name:'Southeast University', region:'Nanjing, China', lat:32.06, lon:118.78, type:'Home Campus', desc:'The heart of the SEU global network.'};
+    var W = 480, H = 480, R = 220;
+    var svg = d3.select('#globe-svg');
+    var tooltip = d3.select('#globe-tooltip');
+
+    // ── Starfield ──
+    (function(){
+      var starsGroup = svg.select('#globe-stars');
+      var stars = [];
+      for(var i=0;i<120;i++){
+        var sx = Math.random()*W, sy = Math.random()*H;
+        var sr = Math.random()*1.4 + .3;
+        var delay = Math.random()*4;
+        stars.push({x:sx, y:sy, r:sr, delay:delay});
+      }
+      starsGroup.selectAll('circle')
+        .data(stars).join('circle')
+        .attr('class','globe-star')
+        .attr('cx',function(d){return d.x})
+        .attr('cy',function(d){return d.y})
+        .attr('r',function(d){return d.r})
+        .style('animation-delay',function(d){return d.delay+'s'})
+        .style('animation-duration',function(d){return (2.5+Math.random()*3.5)+'s'});
+    })();
+
+    // ── Data ──
+    var nanjing = {name:'Southeast University (SEU)', city:'Nanjing', country:'China', lat:32.060255, lon:118.796877, type:'🌐 Home Campus', desc:'Center of SEU global collaboration network — 120+ years of heritage.'};
+
+    // ── SEU Global Partners (from oic.seu.edu.cn — 160+ institutions across 45+ countries) ──
     var partners = [
-      {name:'Monash University', region:'Melbourne, Australia', lat:-37.81, lon:144.96, type:'Joint Research Institute', desc:'Joint PhD programs and advanced materials research with Professor Aibing Yu.'},
-      {name:'CERN / AMS Experiment', region:'Geneva, Switzerland', lat:46.23, lon:6.05, type:'Fundamental Science', desc:'Long-term collaboration with Nobel laureate Samuel Ting on the Alpha Magnetic Spectrometer.'},
-      {name:'HKUST', region:'Hong Kong, China', lat:22.32, lon:114.17, type:'Space & Energy Center', desc:'HKUST–SEU Space Robotics & Energy Center, established in 2024.'},
-      {name:'University of Leeds', region:'Leeds, UK', lat:53.81, lon:-1.55, type:'Strategic Partner', desc:'Member of the Sino-British University Engineering Education and Research Alliance.'},
-      {name:'University of Auckland', region:'Auckland, New Zealand', lat:-36.85, lon:174.76, type:'Strategic Partner', desc:'Joint research and student exchange across engineering and science.'}
+      // 🇨🇳 Asia-Pacific
+      {name:'HKUST', city:'Hong Kong', country:'China', lat:22.337600, lon:114.263000, type:'🚀 Joint Research Center', desc:'HKUST–SEU Space Robotics & Energy Center, est. 2024. Lunar exploration and sustainable energy research.'},
+      {name:'National University of Singapore', city:'Singapore', country:'Singapore', lat:1.296600, lon:103.776400, type:'🎓 Exchange & Research', desc:'Student exchange, joint research in engineering, AI and urban sustainability.'},
+      {name:'Nanyang Technological University', city:'Singapore', country:'Singapore', lat:1.348300, lon:103.683100, type:'🎓 Academic Exchange', desc:'Collaboration in materials science, electrical engineering and smart manufacturing.'},
+      {name:'University of Tokyo', city:'Tokyo', country:'Japan', lat:35.713000, lon:139.762200, type:'🔬 Research Partnership', desc:'Joint research in architecture, civil engineering and disaster prevention technologies.'},
+      {name:'Kyoto University', city:'Kyoto', country:'Japan', lat:35.026200, lon:135.780500, type:'🎓 Student Exchange', desc:'Academic exchange in humanities, engineering and environmental science.'},
+      {name:'University of Malaya', city:'Kuala Lumpur', country:'Malaysia', lat:3.120900, lon:101.653800, type:'🌏 ASEAN Hub', desc:'Regional partnership for student mobility and Southeast Asia research collaboration.'},
+      {name:'Universitas Pelita Harapan', city:'Jakarta', country:'Indonesia', lat:-6.256700, lon:106.618100, type:'🏗 Elite Engineers College', desc:'SEU China-Indonesia College of Elite Engineers, est. 2026. University-enterprise talent model.'},
+      // 🇪🇺 Europe
+      {name:'University of Cambridge', city:'Cambridge', country:'UK', lat:52.205300, lon:0.121800, type:'🏛 Flagship Partner', desc:'Summer/winter programs in engineering, public health and materials science. Sino-British Alliance member.'},
+      {name:'Imperial College London', city:'London', country:'UK', lat:51.498800, lon:-0.174900, type:'🎨 Design & Innovation', desc:'"Design Thinking & Global Challenges" winter program with Royal College of Art.'},
+      {name:'University of Oxford', city:'Oxford', country:'UK', lat:51.754800, lon:-1.254400, type:'🎓 Academic Exchange', desc:'Oriel & Worcester College summer programs. SAF exchange network partner.'},
+      {name:'University of Leeds', city:'Leeds', country:'UK', lat:53.806700, lon:-1.555000, type:'🤝 Alliance Secretariat', desc:'Secretariat of the Sino-British University Engineering Education and Research Alliance.'},
+      {name:'University of Edinburgh', city:'Edinburgh', country:'UK', lat:55.944500, lon:-3.188300, type:'🔬 Research Collaboration', desc:'Joint programs in informatics, engineering and carbon neutrality research.'},
+      {name:'ETH Zurich', city:'Zurich', country:'Switzerland', lat:47.376900, lon:8.548100, type:'🔬 Elite Research', desc:'Collaboration in robotics, computer science and advanced manufacturing.'},
+      {name:'CERN / AMS', city:'Geneva', country:'Switzerland', lat:46.233000, lon:6.055700, type:'🔭 Fundamental Science', desc:'Long-term collaboration with Nobel laureate Samuel Ting on the AMS space experiment.'},
+      {name:'Technical University of Munich', city:'Munich', country:'Germany', lat:48.149000, lon:11.567900, type:'🎓 Exchange & Research', desc:'Student exchange and joint research in engineering, AI and sustainable energy.'},
+      {name:'RWTH Aachen University', city:'Aachen', country:'Germany', lat:50.779200, lon:6.076800, type:'🏗 Engineering Partner', desc:'Joint programs in mechanical engineering, AI, robotics and transportation.'},
+      {name:'Institut Polytechnique de Paris', city:'Paris', country:'France', lat:48.713900, lon:2.213700, type:'🎓 Elite Engineering', desc:'Student exchange and research collaboration in engineering and applied mathematics.'},
+      {name:'KTH Royal Institute of Technology', city:'Stockholm', country:'Sweden', lat:59.347200, lon:18.072900, type:'🎓 Exchange Program', desc:'Tuition-waiver student exchange in engineering, ICT and sustainable development.'},
+      {name:'Trinity College Dublin', city:'Dublin', country:'Ireland', lat:53.343800, lon:-6.254600, type:'🎓 Study Abroad', desc:'Student exchange in engineering, science and humanities.'},
+      {name:'KU Leuven', city:'Leuven', country:'Belgium', lat:50.879800, lon:4.700500, type:'🔬 Research Partner', desc:'Joint research in biomedical engineering, materials science and microelectronics.'},
+      {name:'Lomonosov Moscow State University', city:'Moscow', country:'Russia', lat:55.703900, lon:37.529100, type:'🌏 Academic Exchange', desc:'Academic collaboration and student exchange across science and engineering.'},
+      // 🇺🇸 Americas
+      {name:'MIT', city:'Boston', country:'USA', lat:42.360100, lon:-71.094200, type:'🔬 Elite Partner', desc:'Research collaboration and student programs in engineering, AI and computer science.'},
+      {name:'University of Pennsylvania', city:'Philadelphia', country:'USA', lat:39.952200, lon:-75.193200, type:'🎓 Student Exchange', desc:'Tuition-waiver exchange program. 1 semester / 1 academic year, mutual credit recognition.'},
+      {name:'University of Toronto', city:'Toronto', country:'Canada', lat:43.662900, lon:-79.395700, type:'🔬 Research Collaboration', desc:'Joint research and student exchange in engineering, medicine and public health.'},
+      {name:'University of British Columbia', city:'Vancouver', country:'Canada', lat:49.260600, lon:-123.246000, type:'🎓 Exchange Program', desc:'Summer and semester exchange programs across all disciplines.'},
+      {name:'University of Waterloo', city:'Waterloo', country:'Canada', lat:43.472300, lon:-80.544900, type:'🌐 Joint Training', desc:'Student exchange and joint training in quantum physics, nanotechnology and engineering.'},
+      // 🇦🇺 Oceania
+      {name:'Monash University', city:'Melbourne', country:'Australia', lat:-37.912600, lon:145.134300, type:'🏛 Joint Graduate School', desc:'SEU–Monash Joint Graduate School (Suzhou). Joint PhD programs and advanced materials research.'},
+      {name:'University of Sydney', city:'Sydney', country:'Australia', lat:-33.888300, lon:151.187200, type:'🎓 Exchange Program', desc:'Summer programs and semester exchange in business, engineering, health and humanities.'},
+      {name:'University of Auckland', city:'Auckland', country:'New Zealand', lat:-36.850900, lon:174.764500, type:'🎓 Strategic Partner', desc:'Joint research and student exchange across engineering, science and innovation.'},
+      // 🇿🇦 Africa & South America
+      {name:'University of Pretoria', city:'Pretoria', country:'South Africa', lat:-25.754500, lon:28.231400, type:'🌍 Africa Partner', desc:'Joint student training, summer schools and transportation engineering collaboration.'},
+      {name:'University of Venda', city:'Thohoyandou', country:'South Africa', lat:-22.975600, lon:30.442600, type:'🌍 Africa Partner', desc:'Emerging research and education cooperation in Southern Africa.'},
     ];
 
-    function toRad(d){return d*Math.PI/180;}
-    function project(lat, lon){
-      var lat0 = toRad(center.lat), lon0 = toRad(center.lon);
-      var latr = toRad(lat), lonr = toRad(lon);
-      var x = Math.cos(latr)*Math.cos(lonr);
-      var y = Math.cos(latr)*Math.sin(lonr);
-      var z = Math.sin(latr);
-      var x1 = x*Math.cos(-lon0) - y*Math.sin(-lon0);
-      var y1 = x*Math.sin(-lon0) + y*Math.cos(-lon0);
-      var y2 = y1*Math.cos(lat0) - z*Math.sin(lat0);
-      var z2 = y1*Math.sin(lat0) + z*Math.cos(lat0);
-      return {x: cx + x1*R, y: cy + y2*R, visible: z2 > -0.15};
-    }
+    var globalNodes = [
+      {city:'New York', country:'USA', lat:40.7128, lon:-74.0060, type:'🌎 Americas Hub', desc:'SEU alumni at Google, Microsoft, Columbia. 28 partner institutions across the Americas.'},
+      {city:'São Paulo', country:'Brazil', lat:-23.5505, lon:-46.6333, type:'🌎 Latin America', desc:'Growing student exchange and research collaboration across Brazil and Latin America.'},
+      {city:'Buenos Aires', country:'Argentina', lat:-34.603700, lon:-58.381600, type:'🌎 South America', desc:'Partnership with Universidad Nacional de Tres de Febrero. Expanding regional cooperation.'},
+      {city:'Cairo', country:'Egypt', lat:30.044400, lon:31.235700, type:'🌍 MENA Hub', desc:'Partnerships and scholars from North Africa and the Middle East.'},
+      {city:'Istanbul', country:'Turkey', lat:41.008200, lon:28.978400, type:'🌏 Eurasia Bridge', desc:'Emerging partnerships bridging Europe and Asia. Student exchange and cultural programs.'},
+      {city:'Bangkok', country:'Thailand', lat:13.756300, lon:100.501800, type:'🌏 ASEAN Hub', desc:'Southeast Asia student mobility center. Summer schools and cultural exchange programs.'},
+      {city:'New Delhi', country:'India', lat:28.613900, lon:77.209000, type:'🌏 South Asia', desc:'Joint research and talent exchange with IITs and leading Indian institutions.'},
+      {city:'Seoul', country:'South Korea', lat:37.566500, lon:126.978000, type:'🌏 Korea Partner', desc:'Collaboration with Kyung Hee University and Korea Institute of Energy Research.'},
+      {city:'Nairobi', country:'Kenya', lat:-1.292100, lon:36.821900, type:'🌍 East Africa', desc:'Emerging education and research partnerships. 3 partner institutions across Africa.'},
+    ];
 
-    var connGroup = document.getElementById('globe-connections');
-    var pointGroup = document.getElementById('globe-points');
-    var labelGroup = document.getElementById('globe-labels');
-    var tooltip = document.getElementById('globe-tooltip');
+    // ── Projection ──
+    var projection = d3.geoOrthographic()
+      .scale(R).translate([W/2, H/2]).clipAngle(90)
+      .rotate([-nanjing.lon, -nanjing.lat]);
 
+    var pathGen = d3.geoPath().projection(projection);
+    var graticule = d3.geoGraticule().step([30, 30]);
+
+    var countriesGroup = svg.select('#globe-countries');
+    var graticulePath = svg.select('#globe-graticule');
+    var arcsGroup = svg.select('#globe-arcs');
+    var pulsesGroup = svg.select('#globe-pulses');
+    var pointsGroup = svg.select('#globe-points');
+    var labelsGroup = svg.select('#globe-labels');
+
+    var worldData = null;
+    var currentScale = R;
+    var isDragging = false;
+    var rotationStart = [0,0];
+    var mouseStart = [0,0];
+
+    // ── Tooltip ──
     function showTooltip(e, d){
-      tooltip.innerHTML = '<strong>' + d.type + '</strong>' + d.name + ' · ' + d.region + '<small>' + d.desc + '</small>';
-      tooltip.classList.add('show');
-      moveTooltip(e);
+      tooltip.html('<strong>'+d.type+'</strong>'+ (d.name||d.city) +' · '+ d.city +', '+ (d.country||'China') +'<small>'+ d.desc +'</small>');
+      tooltip.classed('show', true);
+      var rect = svg.node().getBoundingClientRect();
+      tooltip.style('left', Math.min(e.clientX-rect.left+14, rect.width-240)+'px')
+             .style('top', Math.max(e.clientY-rect.top-10, 0)+'px');
     }
-    function moveTooltip(e){
-      var rect = document.getElementById('globe-svg').getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      tooltip.style.left = Math.min(x + 12, rect.width - 220) + 'px';
-      tooltip.style.top = Math.max(y - 12, 0) + 'px';
-    }
-    function hideTooltip(){tooltip.classList.remove('show');}
+    function hideTooltip(){ tooltip.classed('show', false); }
 
-    function makePoint(d, isCenter){
-      var p = project(d.lat, d.lon);
-      if(!p.visible && !isCenter) return null;
-      var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      circle.setAttribute('cx', p.x.toFixed(1));
-      circle.setAttribute('cy', p.y.toFixed(1));
-      circle.setAttribute('r', isCenter ? '5' : '4.5');
-      circle.setAttribute('class', isCenter ? 'globe-point globe-center' : 'globe-point');
-      circle.addEventListener('mouseenter', function(e){showTooltip(e, d);});
-      circle.addEventListener('mousemove', moveTooltip);
-      circle.addEventListener('mouseleave', hideTooltip);
-      return {el:circle, p:p, data:d};
+    // ── Arc with parabolic lift (3D feel) ──
+    function arcFeature(a, b){
+      var interp = d3.geoInterpolate([a.lon, a.lat], [b.lon, b.lat]);
+      var coords = [];
+      for(var i=0;i<=80;i++){
+        var t = i/80, p = interp(t);
+        if(t>.03 && t<.97){
+          var lift = Math.sin(t*Math.PI)*0.12;
+          p = [p[0], p[1]+lift];
+        }
+        coords.push(p);
+      }
+      return {type:'LineString', coordinates:coords};
     }
 
-    var cp = makePoint(center, true);
-    pointGroup.appendChild(cp.el);
+    function projectPoint(d){ return projection([d.lon, d.lat]); }
 
-    partners.forEach(function(partner){
-      var obj = makePoint(partner, false);
-      if(!obj) return;
-      pointGroup.appendChild(obj.el);
-      var dPath = 'M ' + cp.p.x.toFixed(1) + ' ' + cp.p.y.toFixed(1);
-      var mx = (cp.p.x + obj.p.x)/2;
-      var my = (cp.p.y + obj.p.y)/2;
-      var dx = obj.p.x - cp.p.x;
-      var dy = obj.p.y - cp.p.y;
-      var dist = Math.sqrt(dx*dx + dy*dy);
-      var perp = 25 + dist*0.15;
-      var cxq = mx - dy/dist*perp;
-      var cyq = my + dx/dist*perp;
-      dPath += ' Q ' + cxq.toFixed(1) + ' ' + cyq.toFixed(1) + ' ' + obj.p.x.toFixed(1) + ' ' + obj.p.y.toFixed(1);
-      var path = document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d', dPath);
-      path.setAttribute('class', 'globe-connection');
-      connGroup.appendChild(path);
-      var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      lbl.setAttribute('x', obj.p.x.toFixed(1));
-      lbl.setAttribute('y', (obj.p.y + 16).toFixed(1));
-      lbl.setAttribute('class', 'globe-label');
-      lbl.textContent = partner.name.split(' ')[0];
-      labelGroup.appendChild(lbl);
+    // ── Render world map (country polygons + graticule) ──
+    function renderWorld(){
+      if(!worldData) return;
+      countriesGroup.selectAll('path')
+        .data(worldData.features)
+        .join('path')
+        .attr('class','globe-country')
+        .attr('d', pathGen)
+        .on('mouseenter', function(e,d){
+          showTooltip(e, {name:d.properties.name, city:'', country:'', type:'🗺 Country', desc:'SEU connects with partners and scholars in '+d.properties.name+'.'});
+        })
+        .on('mousemove', function(e){
+          var rect = svg.node().getBoundingClientRect();
+          tooltip.style('left', Math.min(e.clientX-rect.left+14, rect.width-240)+'px')
+                 .style('top', Math.max(e.clientY-rect.top-10, 0)+'px');
+        })
+        .on('mouseleave', hideTooltip);
+      graticulePath.datum(graticule()).attr('d', pathGen);
+    }
+
+    // ── Render connections (arcs, points, pulses, labels) ──
+    function renderConnections(){
+      arcsGroup.selectAll('*').remove();
+      pulsesGroup.selectAll('*').remove();
+      pointsGroup.selectAll('*').remove();
+      labelsGroup.selectAll('*').remove();
+
+      // Partner arcs + points
+      partners.forEach(function(p){
+        var d = pathGen(arcFeature(nanjing, p));
+        if(d) arcsGroup.append('path').attr('class','globe-arc').attr('d',d);
+
+        var pt = projectPoint(p);
+        if(pt){
+          pulsesGroup.append('circle')
+            .attr('class','globe-pulse').attr('cx',pt[0]).attr('cy',pt[1]).attr('r',5);
+          pointsGroup.append('circle')
+            .attr('class','globe-point').attr('cx',pt[0]).attr('cy',pt[1]).attr('r',5.5)
+            .on('mouseenter', function(e){ showTooltip(e,p); })
+            .on('mousemove', function(e){
+              var rect = svg.node().getBoundingClientRect();
+              tooltip.style('left', Math.min(e.clientX-rect.left+14, rect.width-240)+'px')
+                     .style('top', Math.max(e.clientY-rect.top-10, 0)+'px');
+            })
+            .on('mouseleave', hideTooltip);
+          labelsGroup.append('text')
+            .attr('class','globe-label').attr('x',pt[0]).attr('y',pt[1]+18).text(p.city);
+        }
+      });
+
+      // Global nodes
+      globalNodes.forEach(function(n){
+        var d = pathGen(arcFeature(nanjing, n));
+        if(d) arcsGroup.append('path').attr('class','globe-node-arc').attr('d',d);
+
+        var pt = projectPoint(n);
+        if(pt){
+          pulsesGroup.append('circle')
+            .attr('class','globe-node-pulse').attr('cx',pt[0]).attr('cy',pt[1]).attr('r',3);
+          pointsGroup.append('circle')
+            .attr('class','globe-node').attr('cx',pt[0]).attr('cy',pt[1]).attr('r',3.5)
+            .on('mouseenter', function(e){ showTooltip(e,n); })
+            .on('mousemove', function(e){
+              var rect = svg.node().getBoundingClientRect();
+              tooltip.style('left', Math.min(e.clientX-rect.left+14, rect.width-240)+'px')
+                     .style('top', Math.max(e.clientY-rect.top-10, 0)+'px');
+            })
+            .on('mouseleave', hideTooltip);
+          labelsGroup.append('text')
+            .attr('class','globe-node-label').attr('x',pt[0]).attr('y',pt[1]+13).text(n.city);
+        }
+      });
+
+      // Nanjing center
+      var cp = projectPoint(nanjing);
+      if(cp){
+        pulsesGroup.append('circle')
+          .attr('class','globe-pulse').attr('cx',cp[0]).attr('cy',cp[1]).attr('r',6)
+          .style('animation-delay','0s');
+        pointsGroup.append('circle')
+          .attr('class','globe-point globe-center').attr('cx',cp[0]).attr('cy',cp[1]).attr('r',7)
+          .on('mouseenter', function(e){ showTooltip(e,nanjing); })
+          .on('mousemove', function(e){
+            var rect = svg.node().getBoundingClientRect();
+            tooltip.style('left', Math.min(e.clientX-rect.left+14, rect.width-240)+'px')
+                   .style('top', Math.max(e.clientY-rect.top-10, 0)+'px');
+          })
+          .on('mouseleave', hideTooltip);
+        labelsGroup.append('text')
+          .attr('class','globe-label').attr('x',cp[0]).attr('y',cp[1]-12).text('Nanjing');
+      }
+    }
+
+    function update(){
+      projection.scale(currentScale);
+      pathGen.projection(projection);
+      renderWorld();
+      renderConnections();
+    }
+
+    // ── Load TopoJSON world map ──
+    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(function(topo){
+        worldData = topojson.feature(topo, topo.objects.countries);
+        update();
+        startAutoRotate();
+      }).catch(function(err){
+        console.error('World map load failed:', err);
+      });
+
+    // ── Auto rotation ──
+    var autoRotate = true;
+    var lastTime = performance.now();
+    function startAutoRotate(){
+      function frame(t){
+        if(autoRotate && !isDragging){
+          var dt = t - lastTime;
+          var rot = projection.rotate();
+          rot[0] += dt * 0.0025;  // gentle rotation
+          projection.rotate(rot);
+          update();
+        }
+        lastTime = t;
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // ── Drag to rotate ──
+    svg.on('mousedown', function(e){
+      isDragging = true; autoRotate = false;
+      rotationStart = projection.rotate();
+      mouseStart = [e.clientX, e.clientY];
     });
+    d3.select(window).on('mousemove.globe', function(e){
+      if(!isDragging) return;
+      var dx = e.clientX - mouseStart[0], dy = e.clientY - mouseStart[1];
+      projection.rotate([rotationStart[0] + dx*0.35, rotationStart[1] - dy*0.35, rotationStart[2]]);
+      update();
+    });
+    d3.select(window).on('mouseup.globe', function(){
+      isDragging = false;
+      setTimeout(function(){ autoRotate = true; }, 2500);
+    });
+
+    // ── Scroll to zoom ──
+    svg.on('wheel', function(e){
+      e.preventDefault();
+      currentScale = Math.max(130, Math.min(300, currentScale + (e.deltaY>0?-10:10)));
+      update();
+    }, {passive:false});
+
+    // ── Pause on hover ──
+    svg.on('mouseenter', function(){ autoRotate = false; });
+    svg.on('mouseleave', function(){ if(!isDragging) autoRotate = true; });
   })();
 </script>
-
 </body>
 </html>
