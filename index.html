@@ -125,21 +125,74 @@
     .impact-visual .topic{font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold-light); margin-bottom:12px; position:relative; z-index:1}
     .impact-visual h2{font-size:clamp(28px,3.5vw,44px); font-weight:800; line-height:1.1; position:relative; z-index:1}
     .impact-visual .tagline{font-size:16px; opacity:.9; margin-top:16px; font-weight:300; position:relative; z-index:1}
-    .scholar-list{display:flex; flex-direction:column; gap:24px}
+    .scholar-list{display:flex; flex-direction:column; gap:24px; perspective:1200px}
     .scholar{
-      display:flex; gap:18px; align-items:flex-start;
+      display:grid; grid-template-columns:90px 1fr; gap:20px; align-items:center;
       padding:22px; border-radius:var(--radius); border:1px solid var(--light-gray);
-      background:var(--offwhite);
+      background:var(--offwhite); position:relative; overflow:hidden;
+      transform-style:preserve-3d; transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+      cursor:pointer;
     }
-    .scholar .avatar{
-      width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;
-      display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0
+    .scholar::before{
+      content:""; position:absolute; inset:0; z-index:0;
+      background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(173,152,110,.12), transparent 40%);
+      opacity:0; transition:opacity .4s ease; pointer-events:none;
     }
-    .scholar h4{font-size:16px; font-weight:700; margin-bottom:4px}
-    .scholar .role{font-size:12px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px}
-    .scholar p{font-size:14px; color:var(--gray); line-height:1.5}
+    .scholar:hover::before{opacity:1}
+    .scholar:hover{
+      transform:translateY(-6px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+      box-shadow:0 24px 60px rgba(21,30,73,.14), 0 0 0 1px rgba(173,152,110,.35);
+      border-color:rgba(173,152,110,.45);
+    }
+    .scholar-photo-wrap{
+      width:90px; height:90px; border-radius:50%; position:relative; z-index:1;
+      background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+      padding:3px; flex-shrink:0; box-shadow:0 8px 24px rgba(21,30,73,.18);
+      transition:transform .35s ease;
+    }
+    .scholar:hover .scholar-photo-wrap{transform:scale(1.06) translateZ(20px)}
+    .scholar-photo{
+      width:100%; height:100%; border-radius:50%; object-fit:cover;
+      background:#fff; border:2px solid #fff;
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-size:34px; font-weight:700; font-family:Inter,sans-serif;
+    }
+    .scholar-photo[data-initial]::before{content:attr(data-initial)}
+    .scholar-body{position:relative; z-index:1}
+    .scholar h4{font-size:17px; font-weight:700; margin-bottom:4px; transition:color .2s}
+    .scholar:hover h4{color:var(--navy-dark)}
+    .scholar .role{font-size:11px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px}
+    .scholar p{font-size:14px; color:var(--gray); line-height:1.55}
     .badges{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
-    .badge{font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; background:#fff; color:var(--navy); border:1px solid var(--light-gray)}
+    .badge{font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; background:#fff; color:var(--navy); border:1px solid var(--light-gray); transition:all .2s}
+    .scholar:hover .badge{background:var(--navy); color:#fff; border-color:var(--navy)}
+
+    /* Scholar hover overlay bio */
+    .scholar-overlay{
+      position:absolute; inset:0; z-index:2;
+      background:linear-gradient(180deg, rgba(21,30,73,.92) 0%, rgba(11,16,38,.97) 100%);
+      color:#fff; padding:26px;
+      display:flex; flex-direction:column; justify-content:center;
+      opacity:0; transform:translateY(20px); pointer-events:none;
+      transition:opacity .4s cubic-bezier(.4,0,.2,1), transform .4s cubic-bezier(.4,0,.2,1);
+      backdrop-filter:blur(6px);
+    }
+    .scholar:hover .scholar-overlay,
+    .scholar:focus-within .scholar-overlay{
+      opacity:1; transform:translateY(0); pointer-events:auto;
+    }
+    .scholar-overlay h4{font-size:18px; color:#fff; margin-bottom:6px}
+    .scholar-overlay .role{font-size:11px; color:var(--gold-light); margin-bottom:12px}
+    .scholar-overlay p{font-size:13.5px; color:rgba(255,255,255,.9); line-height:1.65; margin-bottom:14px}
+    .scholar-overlay .badges{margin-top:0}
+    .scholar-overlay .badge{background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.25)}
+    .scholar-overlay .badge:hover{background:#fff; color:var(--navy)}
+    .scholar-overlay .hint{
+      position:absolute; bottom:14px; right:18px; font-size:11px; opacity:.55;
+      display:flex; align-items:center; gap:6px;
+    }
+    .scholar-overlay .hint::before{content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gold-light); animation:pulseDot 1.5s infinite}
+    @keyframes pulseDot{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.5; transform:scale(1.4)}}
 
     /* Partnerships */
     #partnerships{background:var(--navy); color:#fff}
@@ -278,7 +331,7 @@
     .deliverable .name{font-size:13px; font-weight:600; color:var(--navy)}
 
     /* Smooth hover animations */
-    .stat-card,.discipline,.campus-card,.alumni-card,.case-card,.deliverable,.scholar{
+    .stat-card,.discipline,.campus-card,.alumni-card,.case-card,.deliverable{
       transition:transform .25s, box-shadow .25s, border-color .25s;
     }
     .stat-card:hover,.discipline:hover,.campus-card:hover,.alumni-card:hover,.case-card:hover{transform:translateY(-4px); box-shadow:var(--shadow)}
@@ -365,7 +418,80 @@
     .globe-stat .num{font-size:22px; font-weight:800; color:var(--gold-light)}
     .globe-stat .txt{font-size:11px; opacity:.75; text-transform:uppercase; letter-spacing:.5px}
 
-    /* Responsive */
+    /* ─── Global Animations & Micro-interactions ─── */
+    /* Scroll reveal */
+    .reveal{opacity:0; transform:translateY(36px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1; transform:translateY(0)}
+    .reveal-left{opacity:0; transform:translateX(-40px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)}
+    .reveal-left.visible{opacity:1; transform:translateX(0)}
+    .reveal-right{opacity:0; transform:translateX(40px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)}
+    .reveal-right.visible{opacity:1; transform:translateX(0)}
+    .reveal-scale{opacity:0; transform:scale(.92); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)}
+    .reveal-scale.visible{opacity:1; transform:scale(1)}
+    .stagger-1{transition-delay:.08s}
+    .stagger-2{transition-delay:.16s}
+    .stagger-3{transition-delay:.24s}
+    .stagger-4{transition-delay:.32s}
+    .stagger-5{transition-delay:.40s}
+
+    /* Gradient shimmer text */
+    .shimmer-text{
+      background:linear-gradient(90deg, var(--navy) 0%, var(--gold) 35%, var(--navy) 70%);
+      background-size:200% auto;
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:shimmer 5s linear infinite;
+    }
+    #cover .shimmer-text{
+      background:linear-gradient(90deg, #fff 0%, var(--gold-light) 35%, #fff 70%);
+      background-size:200% auto;
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    @keyframes shimmer{to{background-position:200% center}}
+
+    /* Floating elements */
+    .float{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    /* Magnetic button effect handled in JS */
+    .magnetic{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+
+    /* Animated underline for nav */
+    .nav-links a{position:relative}
+    .nav-links a::after{
+      content:""; position:absolute; bottom:-4px; left:50%; width:0; height:2px;
+      background:var(--gold); transition:width .25s ease, left .25s ease;
+    }
+    .nav-links a:hover::after{width:100%; left:0}
+
+    /* Section divider glow */
+    .section-glow{
+      position:absolute; top:0; left:50%; transform:translateX(-50%);
+      width:60%; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity:.35;
+    }
+
+    /* Card spotlight (used with JS) */
+    .spotlight-card{
+      position:relative; overflow:hidden;
+    }
+    .spotlight-card::before{
+      content:""; position:absolute; inset:0; z-index:0;
+      background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(173,152,110,.10), transparent 40%);
+      opacity:0; transition:opacity .4s ease; pointer-events:none;
+    }
+    .spotlight-card:hover::before{opacity:1}
+
+    /* Typewriter cursor */
+    .typewriter-cursor{display:inline-block; width:3px; height:1em; background:var(--gold); margin-left:4px; animation:blink 1s step-end infinite; vertical-align:middle}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+    /* Reduced motion */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important}
+      html{scroll-behavior:auto}
+    }
     @media(max-width:900px){
       section{padding:90px 24px 50px}
       .split,.impact-layout,.partnerships-grid,.backcover-grid,.practice-hero{grid-template-columns:1fr; gap:36px}
@@ -376,6 +502,10 @@
       .impact-visual{min-height:320px}
       .cover-logo{height:60px}
       .practice-stats,.deliverables{grid-template-columns:repeat(2,1fr)}
+      .scholar{grid-template-columns:68px 1fr; gap:14px; padding:18px}
+      .scholar-photo-wrap{width:68px; height:68px}
+      .scholar-photo{font-size:26px}
+      .scholar-overlay{padding:18px}
     }
     #backcover{background:var(--navy-dark); color:#fff; min-height:auto; padding:80px 48px}
     .backcover-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center}
@@ -422,25 +552,25 @@
 <!-- COVER -->
 <section id="cover">
   <div class="container">
-    <img src="seu_logo.png" alt="Southeast University" class="cover-logo">
-    <div class="cover-badge">
+    <img src="seu_logo.png" alt="Southeast University" class="cover-logo reveal">
+    <div class="cover-badge reveal stagger-1">
       <span>⚡</span> Founded in 1902 · Nanjing, China
     </div>
-    <h1>Southeast University:<br><span>Global Impact,<br>Rooted in China</span></h1>
-    <p class="subtitle">Where 120 years of heritage meets world-changing innovation.</p>
-    <div class="cover-meta">
+    <h1 class="reveal stagger-2">Southeast University:<br><span class="shimmer-text">Global Impact,<br>Rooted in China</span></h1>
+    <p class="subtitle reveal stagger-3">Where 120 years of heritage meets world-changing innovation.</p>
+    <div class="cover-meta reveal stagger-4">
       <div><strong>120+</strong>Years of History</div>
       <div><strong>Top 20</strong>Global Engineering</div>
       <div><strong>30+</strong>Intl. Academicians</div>
     </div>
-    <div class="scroll-hint">Scroll to explore ↓</div>
+    <div class="scroll-hint reveal stagger-5">Scroll to explore ↓</div>
   </div>
 </section>
 
 <section id="summer-practice">
   <div class="container">
     <div class="practice-hero">
-      <div class="practice-visual">
+      <div class="practice-visual reveal-left">
         <div class="bg" style="background-image:url('主视觉.jpg')"></div>
         <div class="overlay">
           <div class="team-name">Summer Practice Team · 国际纵队</div>
@@ -449,17 +579,17 @@
         </div>
       </div>
 
-      <div class="practice-content">
-        <div class="page-label">Student-Led Initiative</div>
-        <div class="project-title">Vision of Perfection: Youth Voices of SEU, Echoed Globally</div>
-        <p>
+      <div class="practice-content reveal-right">
+        <div class="page-label reveal stagger-1">Student-Led Initiative</div>
+        <div class="project-title reveal stagger-2">Vision of Perfection: Youth Voices of SEU, Echoed Globally</div>
+        <p class="reveal stagger-3">
           We are <strong>国际纵队 (International Brigade)</strong>, a student practice team from Southeast University. Our project, <strong>"至善视界" (Vision of Perfection)</strong>, tells the SEU story to the world through the eyes of young people.
         </p>
-        <p>
+        <p class="reveal stagger-4">
           Through desk research and global-alumni interviews, we explored how SEU's 120-year heritage, world-leading engineering, and international partnerships shape lives across borders. We then turned these insights into a multilingual brand narrative — this brochure, short videos, and social content — designed for international audiences.
         </p>
 
-        <div class="practice-stats">
+        <div class="practice-stats reveal stagger-4">
           <div class="practice-stat">
             <div class="num">120+</div>
             <div class="label">Years of SEU History Researched</div>
@@ -474,8 +604,8 @@
           </div>
         </div>
 
-        <h2 style="margin-top:12px">What We Created</h2>
-        <div class="deliverables">
+        <h2 style="margin-top:12px" class="reveal stagger-5">What We Created</h2>
+        <div class="deliverables reveal stagger-5">
           <div class="deliverable">
             <div class="icon">📖</div>
             <div class="name">Brand Brochure</div>
@@ -494,7 +624,7 @@
           </div>
         </div>
 
-        <p style="margin-top:8px">
+        <p style="margin-top:8px" class="reveal stagger-5">
           <em>"We believe the best way to introduce SEU to the world is through authentic stories — of researchers, alumni, and the city of Nanjing — told by the young generation that will carry them forward."</em>
         </p>
       </div>
@@ -506,10 +636,10 @@
 <!-- PARTNERSHIPS -->
 <section id="partnerships">
   <div class="container">
-    <div class="page-label">Who We Partner With</div>
-    <div class="partnerships-grid">
-      <div>
-        <div class="globe-card">
+    <div class="page-label reveal">Who We Partner With</div>
+    <div class="partnerships-grid reveal">
+      <div class="reveal-left">
+        <div class="globe-card spotlight-card">
           <h3>Global Collaboration Network</h3>
           <div class="globe-subtitle">160+ partners across 45+ countries · Drag to rotate</div>
           <div class="globe-wrap">
@@ -578,8 +708,8 @@
         </div>
       </div>
 
-      <div>
-        <div class="map-card">
+      <div class="reveal-right">
+        <div class="map-card spotlight-card">
           <h3>Cooperation Programs</h3>
           <ul class="partner-list">
             <li>SEU–Monash Joint Graduate School (Suzhou) — joint PhD programs &amp; advanced materials</li>
@@ -590,15 +720,15 @@
           </ul>
         </div>
         <div class="cases">
-        <div class="case-card">
+        <div class="case-card spotlight-card reveal stagger-1">
           <h4>SEU–Monash Joint Graduate School</h4>
           <p>Co-led by Prof. Aibing Yu (Fellow of Australian Academy). Joint PhD programs in advanced materials, energy and transportation.</p>
         </div>
-        <div class="case-card">
+        <div class="case-card spotlight-card reveal stagger-2">
           <h4>Sino-British Engineering Education Alliance</h4>
           <p>SEU serves as Secretariat. Member institutions include Cambridge, Imperial, Leeds, Edinburgh, Birmingham and more.</p>
         </div>
-        <div class="case-card">
+        <div class="case-card spotlight-card reveal stagger-3">
           <div class="case-stat">24<span>International Research Platforms · 20 Countries · 60+ Universities</span></div>
         </div>
       </div>
@@ -613,23 +743,23 @@
   <!-- 六朝松 — SEU official visual identity symbol (from seu-vis.html) -->
   <img class="pine-bg" src="liuchaosong.svg" alt="六朝松">
   <div class="container">
-    <div class="split">
-      <div>
+    <div class="split reveal">
+      <div class="reveal-left">
         <div class="page-label">Who We Are</div>
         <p class="intro-quote">
-          One of China's oldest and most influential universities. <span>A launchpad for technologies that billions use every day.</span>
+          One of China's oldest and most influential universities. <span class="shimmer-text">A launchpad for technologies that billions use every day.</span>
         </p>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card">
+      <div class="stats-grid reveal-right">
+        <div class="stat-card reveal stagger-1">
           <div class="num">120<span>+</span></div>
           <div class="label">Years of History<br>Founded 1902</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card reveal stagger-2">
           <div class="num">Top 20</div>
           <div class="label">Global Engineering &amp; Computer Science<br>ESI Rankings</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card reveal stagger-3">
           <div class="num">30<span>+</span></div>
           <div class="label">International Alumni in National Academies Worldwide</div>
         </div>
@@ -642,38 +772,65 @@
 <section id="impact-networks" class="impact-page">
   <div class="container">
     <div class="impact-layout">
-      <div class="impact-visual">
+      <div class="impact-visual reveal-left">
         <div class="bg" style="background-image:url('nantong_optimized.jpg')"></div>
         <div class="topic">Global Impact · 01</div>
         <h2>The Networks You Rely On</h2>
         <p class="tagline">The wireless standards in your smartphone were shaped by SEU researchers.</p>
       </div>
       <div class="scholar-list">
-        <div class="scholar">
-          <div class="avatar">Y</div>
-          <div>
+        <div class="scholar reveal stagger-1" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/xiaohu_you.jpg" alt="Xiaohu You" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Xiaohu You</h4>
             <div class="role">5G/6G Pioneer</div>
             <p>Led China's first 4G/5G standardization efforts; his team's work is embedded in global mobile communications.</p>
             <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">CAE Academician</span></div>
           </div>
+          <div class="scholar-overlay">
+            <h4>Xiaohu You</h4>
+            <div class="role">5G/6G Pioneer · CAE Academician</div>
+            <p>Director of SEU's National Mobile Communications Research Laboratory and a member of the Chinese Academy of Engineering. He led China's first 4G/5G standardization efforts and his team's work is embedded in global mobile communications standards.</p>
+            <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">CAE Academician</span><span class="badge">4G/5G Pioneer</span></div>
+            <div class="hint">live profile</div>
+          </div>
         </div>
-        <div class="scholar">
-          <div class="avatar">W</div>
-          <div>
+        <div class="scholar reveal stagger-2" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/jiangzhou_wang.png" alt="Jiangzhou Wang" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Jiangzhou Wang</h4>
             <div class="role">Wireless Systems</div>
             <p>Fellow of the Royal Academy of Engineering; shaped next-generation mobile network architectures.</p>
             <div class="badges"><span class="badge">FREng</span><span class="badge">IEEE Fellow</span></div>
           </div>
+          <div class="scholar-overlay">
+            <h4>Jiangzhou Wang</h4>
+            <div class="role">Wireless Systems · FREng</div>
+            <p>Fellow of the Royal Academy of Engineering and IEEE Fellow at SEU's School of Information Science and Engineering. His research on MIMO, cognitive radio and green communications has shaped next-generation mobile network architectures.</p>
+            <div class="badges"><span class="badge">FREng</span><span class="badge">IEEE Fellow</span><span class="badge">Royal Academy</span></div>
+            <div class="hint">live profile</div>
+          </div>
         </div>
-        <div class="scholar">
-          <div class="avatar">T</div>
-          <div>
+        <div class="scholar reveal stagger-3" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/wen_tong.png" alt="Wen Tong" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Wen Tong</h4>
             <div class="role">6G Visionary</div>
             <p>Chief scientist at China's 6G R&amp;D initiatives; driving the global roadmap for beyond-5G systems.</p>
             <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">Huawei Fellow</span></div>
+          </div>
+          <div class="scholar-overlay">
+            <h4>Wen Tong</h4>
+            <div class="role">6G Visionary · Huawei Fellow</div>
+            <p>IEEE Fellow and former chief scientist at Huawei's 2012 Labs. He has driven China's 6G R&amp;D initiatives and the global roadmap for beyond-5G systems, including pioneering work on polar codes and massive MIMO.</p>
+            <div class="badges"><span class="badge">IEEE Fellow</span><span class="badge">Huawei Fellow</span><span class="badge">6G Roadmap</span></div>
+            <div class="hint">live profile</div>
           </div>
         </div>
       </div>
@@ -685,38 +842,65 @@
 <section id="impact-materials" class="impact-page">
   <div class="container">
     <div class="impact-layout">
-      <div class="impact-visual">
+      <div class="impact-visual reveal-left">
         <div class="bg" style="background-image:url('jiulonghu_optimized.jpg')"></div>
         <div class="topic">Global Impact · 02</div>
         <h2>The Materials of Tomorrow</h2>
         <p class="tagline">From molecular ferroelectrics to next-generation batteries.</p>
       </div>
       <div class="scholar-list">
-        <div class="scholar">
-          <div class="avatar" style="background:var(--gold);color:var(--navy)">X</div>
-          <div>
+        <div class="scholar reveal stagger-1" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/xiong_rengen.png" alt="Ren-Gen Xiong" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Ren-Gen Xiong</h4>
             <div class="role">Molecular Ferroelectrics</div>
             <p>His molecular ferroelectric materials are redefining flexible electronics and low-power memory devices.</p>
             <div class="badges"><span class="badge">CAS Academician</span><span class="badge">TWAS Fellow</span></div>
           </div>
+          <div class="scholar-overlay">
+            <h4>Ren-Gen Xiong</h4>
+            <div class="role">Molecular Ferroelectrics · CAS Academician</div>
+            <p>Member of the Chinese Academy of Sciences and TWAS at SEU's School of Chemistry and Chemical Engineering. His molecular ferroelectric materials, published in Science and Nature, are redefining flexible electronics and low-power memory devices.</p>
+            <div class="badges"><span class="badge">CAS Academician</span><span class="badge">TWAS Fellow</span><span class="badge">Science/Nature</span></div>
+            <div class="hint">live profile</div>
+          </div>
         </div>
-        <div class="scholar">
-          <div class="avatar" style="background:var(--gold);color:var(--navy)">W</div>
-          <div>
+        <div class="scholar reveal stagger-2" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/yuping_wu.jpg" alt="Yuping Wu" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Yuping Wu</h4>
             <div class="role">Energy Storage</div>
             <p>Pioneering safer, higher-density batteries for electric vehicles and grid-scale storage.</p>
             <div class="badges"><span class="badge">RSC Fellow</span><span class="badge">Highly Cited Researcher</span></div>
           </div>
+          <div class="scholar-overlay">
+            <h4>Yuping Wu</h4>
+            <div class="role">Energy Storage · RSC Fellow</div>
+            <p>Fellow of the Royal Society of Chemistry and a highly cited researcher at SEU. He pioneers safer, higher-density lithium-ion and sodium-ion batteries for electric vehicles and grid-scale energy storage.</p>
+            <div class="badges"><span class="badge">RSC Fellow</span><span class="badge">Highly Cited Researcher</span><span class="badge">Battery Pioneer</span></div>
+            <div class="hint">live profile</div>
+          </div>
         </div>
-        <div class="scholar">
-          <div class="avatar" style="background:var(--gold);color:var(--navy)">Y</div>
-          <div>
+        <div class="scholar reveal stagger-3" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/aibing_yu.png" alt="Aibing Yu" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Aibing Yu</h4>
             <div class="role">Particle Science</div>
             <p>World-leading researcher in particle technology and process engineering; Fellow of multiple national academies.</p>
             <div class="badges"><span class="badge">Fellow of Australian Academy</span><span class="badge">SEU-Monash Joint Institute</span></div>
+          </div>
+          <div class="scholar-overlay">
+            <h4>Aibing Yu</h4>
+            <div class="role">Particle Science · Australian Academician</div>
+            <p>Vice President of SEU and co-director of the SEU–Monash Joint Graduate School. Fellow of the Australian Academy of Science and Academy of Technology and Engineering, he is a world-leading researcher in particle technology and process engineering.</p>
+            <div class="badges"><span class="badge">Australian Academy</span><span class="badge">SEU-Monash</span><span class="badge">Process Engineering</span></div>
+            <div class="hint">live profile</div>
           </div>
         </div>
       </div>
@@ -728,29 +912,47 @@
 <section id="impact-health" class="impact-page">
   <div class="container">
     <div class="impact-layout">
-      <div class="impact-visual">
+      <div class="impact-visual reveal-left">
         <div class="bg" style="background-image:url('intro_optimized.jpg')"></div>
         <div class="topic">Global Impact · 03</div>
         <h2>Health, Across Borders</h2>
         <p class="tagline">Brain research and medical technologies adopted by labs worldwide.</p>
       </div>
       <div class="scholar-list">
-        <div class="scholar">
-          <div class="avatar" style="background:#fff;color:var(--navy)">Z</div>
-          <div>
+        <div class="scholar reveal stagger-1" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/ping_zheng.png" alt="Ping Zheng" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Ping Zheng</h4>
             <div class="role">Neuroscience</div>
             <p>Advancing the understanding of neural circuits and neurodegenerative diseases in leading international labs.</p>
             <div class="badges"><span class="badge">CAE Academician</span><span class="badge">Canada Research Chair Alumni</span></div>
           </div>
+          <div class="scholar-overlay">
+            <h4>Ping Zheng</h4>
+            <div class="role">Neuroscience · CAE Academician</div>
+            <p>Member of the Chinese Academy of Engineering and a neuroscientist with experience at leading international labs including the University of Alberta. His work advances understanding of neural circuits and neurodegenerative diseases.</p>
+            <div class="badges"><span class="badge">CAE Academician</span><span class="badge">Neuroscience</span><span class="badge">Global Labs</span></div>
+            <div class="hint">live profile</div>
+          </div>
         </div>
-        <div class="scholar">
-          <div class="avatar" style="background:#fff;color:var(--navy)">P</div>
-          <div>
+        <div class="scholar reveal stagger-2" tabindex="0">
+          <div class="scholar-photo-wrap">
+            <img src="scholars/hanchuan_peng.png" alt="Hanchuan Peng" class="scholar-photo">
+          </div>
+          <div class="scholar-body">
             <h4>Hanchuan Peng &amp; Zhen Xu</h4>
             <div class="role">Biomedical Engineering</div>
             <p>AIMBE Fellows developing high-resolution brain imaging and non-invasive therapeutic ultrasound technologies.</p>
             <div class="badges"><span class="badge">AIMBE Fellow</span><span class="badge">IEEE Fellow</span></div>
+          </div>
+          <div class="scholar-overlay">
+            <h4>Hanchuan Peng &amp; Zhen Xu</h4>
+            <div class="role">Biomedical Engineering · AIMBE/IEEE Fellows</div>
+            <p>Hanchuan Peng (AIMBE Fellow) is a leading expert in brain imaging and neuroinformatics at SEU's School of Biological Science and Medical Engineering. Zhen Xu (IEEE Fellow) advances non-invasive therapeutic ultrasound and medical imaging technologies.</p>
+            <div class="badges"><span class="badge">AIMBE Fellow</span><span class="badge">IEEE Fellow</span><span class="badge">Brain Imaging</span></div>
+            <div class="hint">live profile</div>
           </div>
         </div>
       </div>
@@ -761,50 +963,50 @@
 <!-- CAMPUSES -->
 <section id="campuses">
   <div class="container">
-    <div class="campuses-header">
+    <div class="campuses-header reveal">
       <div class="page-label">What You Can Find Here</div>
-      <h2>From Historic Architecture to the Labs Defining 6G</h2>
+      <h2 class="shimmer-text">From Historic Architecture to the Labs Defining 6G</h2>
     </div>
 
-    <div class="disciplines">
-      <div class="discipline">
+    <div class="disciplines reveal">
+      <div class="discipline reveal stagger-1">
         <div class="rank">Top 20<span>ESI</span></div>
         <div class="name">Engineering</div>
         <div class="src">Essential Science Indicators</div>
       </div>
-      <div class="discipline">
+      <div class="discipline reveal stagger-2">
         <div class="rank">Top 16<span>ESI</span></div>
         <div class="name">Computer Science</div>
         <div class="src">Essential Science Indicators</div>
       </div>
-      <div class="discipline">
+      <div class="discipline reveal stagger-3">
         <div class="rank">Top Tier<span>CN</span></div>
         <div class="name">Architecture</div>
         <div class="src">China's Leading Programs</div>
       </div>
-      <div class="discipline">
+      <div class="discipline reveal stagger-4">
         <div class="rank">Top 1%<span>ESI</span></div>
         <div class="name">Biomedical Engineering, Mathematics &amp; more</div>
         <div class="src">Multiple disciplines ranked globally</div>
       </div>
     </div>
 
-    <div class="campus-trio">
-      <div class="campus-card">
+    <div class="campus-trio reveal">
+      <div class="campus-card reveal stagger-1">
         <div class="bg" style="background-image:url('cover_optimized.jpg')"></div>
         <div>
           <h4>Sipailou Campus</h4>
           <p>Historic heart of SEU — where the iconic Great Hall and century-old academic tradition stand.</p>
         </div>
       </div>
-      <div class="campus-card">
+      <div class="campus-card reveal stagger-2">
         <div class="bg" style="background-image:url('jiulonghu_optimized.jpg')"></div>
         <div>
           <h4>Jiulonghu Campus</h4>
           <p>A modern innovation hub spanning science, engineering, and the arts on the shores of Jiulong Lake.</p>
         </div>
       </div>
-      <div class="campus-card">
+      <div class="campus-card reveal stagger-3">
         <div class="bg" style="background-image:url('intro_optimized.jpg')"></div>
         <div>
           <h4>Purple Mountain Laboratories</h4>
@@ -818,12 +1020,12 @@
 <!-- ALUMNI -->
 <section id="alumni">
   <div class="container">
-    <div class="alumni-header">
+    <div class="alumni-header reveal">
       <div class="page-label">Our People, Everywhere</div>
       <h2>SEU Graduates Lead on Every Continent</h2>
     </div>
 
-    <div class="map-placeholder">
+    <div class="map-placeholder reveal-scale">
       <svg viewBox="0 0 1000 500" preserveAspectRatio="none">
         <path fill="#ffffff" d="M220,180 Q250,160 280,180 T340,180 T400,200 T460,190 T520,210 T580,200 T640,220 T700,200 T760,210 T820,190 T880,200" opacity=".3"/>
         <circle cx="180" cy="160" r="4" fill="#AD986E"/>
@@ -838,24 +1040,24 @@
       </div>
     </div>
 
-    <div class="alumni-grid">
-      <div class="alumni-card">
+    <div class="alumni-grid reveal">
+      <div class="alumni-card reveal stagger-1">
         <div class="loc">Silicon Valley / Seattle</div>
         <div class="names">Xiangyang Shen · Yong Rui</div>
       </div>
-      <div class="alumni-card">
+      <div class="alumni-card reveal stagger-2">
         <div class="loc">London / UK</div>
         <div class="names">Jiangzhou Wang</div>
       </div>
-      <div class="alumni-card">
+      <div class="alumni-card reveal stagger-3">
         <div class="loc">Australia</div>
         <div class="names">Aibing Yu</div>
       </div>
-      <div class="alumni-card">
+      <div class="alumni-card reveal stagger-4">
         <div class="loc">Canada</div>
         <div class="names">Zhishen Wu · Ping Zheng</div>
       </div>
-      <div class="alumni-card">
+      <div class="alumni-card reveal stagger-5">
         <div class="loc">Finland</div>
         <div class="names">Peter David Lund</div>
       </div>
@@ -865,17 +1067,17 @@
 
 <!-- CTA -->
 <section id="cta">
-  <div class="container">
+  <div class="container reveal">
     <div class="page-label" style="color:var(--gold-light)">Join the Network</div>
     <h2>Be Part of the Next Century of Impact</h2>
     <p style="font-size:18px; opacity:.85; max-width:620px; margin:0 auto">
       Whether you are a prospective student, a research partner, or a global institution, SEU offers a gateway to innovation that begins in Nanjing and reaches the world.
     </p>
 
-    <div class="motto chinese">止于至善</div>
+    <div class="motto chinese float">止于至善</div>
     <div class="motto-trans">Striving for Perfection</div>
 
-    <div class="qr-section">
+    <div class="qr-section reveal-scale">
       <img src="seu_brochure_qr.png" alt="Scan to view SEU brochure online">
       <p>Scan this QR code to explore the digital version of this brochure.</p>
     </div>
@@ -889,28 +1091,28 @@
 
 <!-- BACK COVER -->
 <section id="backcover">
-  <div class="container">
+  <div class="container reveal">
     <div class="backcover-grid">
-      <div class="backcover-left">
+      <div class="backcover-left reveal-left">
         <div class="seal-big"><img src="seu_logo.png" alt="SEU Logo"></div>
         <h2>Southeast University</h2>
         <p><strong>China's heritage. The world's future.</strong></p>
         <p style="margin-top:12px">Founded in 1902 in Nanjing, SEU continues to transform fundamental science into technologies that improve lives across the globe.</p>
       </div>
-      <div class="backcover-right">
-        <div class="contact-item">
+      <div class="backcover-right reveal-right">
+        <div class="contact-item reveal stagger-1">
           <div>
             <strong>International Admissions</strong>
             admission@seu.edu.cn · www.seu.edu.cn/english
           </div>
         </div>
-        <div class="contact-item">
+        <div class="contact-item reveal stagger-2">
           <div>
             <strong>Global Partnerships</strong>
             international@seu.edu.cn
           </div>
         </div>
-        <div class="contact-item">
+        <div class="contact-item reveal stagger-3">
           <div>
             <strong>Follow SEU</strong>
             WeChat · LinkedIn · X/Twitter · YouTube
@@ -934,6 +1136,113 @@
       document.querySelector('.nav-links').classList.remove('open');
     });
   });
+
+  // ─── Scroll Reveal Animations ───
+  (function(){
+    var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    if(!('IntersectionObserver' in window)){
+      revealEls.forEach(function(el){ el.classList.add('visible'); });
+      return;
+    }
+    // Hero elements should be visible immediately on load
+    document.querySelectorAll('#cover .reveal, #cover .reveal-left, #cover .reveal-right, #cover .reveal-scale').forEach(function(el){ el.classList.add('visible'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  })();
+
+  // ─── Scholar Card 3D Tilt & Spotlight ───
+  (function(){
+    var cards = document.querySelectorAll('.scholar');
+    cards.forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var cx = rect.width / 2;
+        var cy = rect.height / 2;
+        var rx = ((y - cy) / cy) * -4; // rotateX
+        var ry = ((x - cx) / cx) * 4;  // rotateY
+        card.style.setProperty('--mouse-x', x + 'px');
+        card.style.setProperty('--mouse-y', y + 'px');
+        card.style.setProperty('--rx', rx + 'deg');
+        card.style.setProperty('--ry', ry + 'deg');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+  })();
+
+  // ─── Spotlight Cards (Partnerships, Cases) ───
+  (function(){
+    document.querySelectorAll('.spotlight-card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', x + 'px');
+        card.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
+  })();
+
+  // ─── Magnetic CTA Buttons ───
+  (function(){
+    document.querySelectorAll('.cta-btn, .nav-cta').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = 'translate(' + (x * 0.18) + 'px, ' + (y * 0.18) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){
+        btn.style.transform = '';
+      });
+    });
+  })();
+
+  // ─── Cover Typewriter Tagline ───
+  (function(){
+    var subtitle = document.querySelector('#cover .subtitle');
+    if(!subtitle) return;
+    var text = subtitle.textContent;
+    subtitle.textContent = '';
+    subtitle.style.minHeight = '1.6em';
+    var i = 0;
+    function type(){
+      if(i <= text.length){
+        subtitle.textContent = text.slice(0, i);
+        i++;
+        setTimeout(type, 32);
+      }
+    }
+    setTimeout(type, 900);
+  })();
+
+  // ─── Smooth Parallax for Pine Background ───
+  (function(){
+    var pine = document.querySelector('.pine-bg');
+    if(!pine) return;
+    var ticking = false;
+    window.addEventListener('scroll', function(){
+      if(!ticking){
+        requestAnimationFrame(function(){
+          var y = window.scrollY;
+          pine.style.transform = 'translateY(' + (y * 0.08) + 'px) scale(1)';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
 
   // ─── Interactive D3 Globe — Real World Map + Starfield ───
   // Design references: Stripe Globe · Globestudio · deck.gl arc diagrams
