@@ -353,14 +353,14 @@
 
     /* ═══════════════ Chapter 1: Summer Practice (Redesigned) ═══════════════ */
     .chapter-one{background:var(--white); position:relative}
-    .practice-hero-v2{display:grid; grid-template-columns:1fr 1.15fr; gap:0; align-items:stretch; min-height:100vh}
-    /* Left Visual */
+    .practice-hero-v2{display:grid; grid-template-columns:1fr 1.15fr; gap:0; align-items:stretch}
+    /* Left Visual — full bleed inside grid cell */
     .practice-visual-v2{
       position:relative; overflow:hidden; display:flex; align-items:flex-end;
-      border-radius:var(--radius-lg); margin:12px; box-shadow:var(--shadow-lg);
+      min-height:100vh; box-shadow:var(--shadow-lg);
       background:var(--navy);
     }
-    .practice-visual-v2 .bg{position:absolute; inset:0; background-size:cover; background-position:center; z-index:0}
+    .practice-visual-v2 .bg{position:absolute; inset:0; background-size:cover; background-position:center 30%; z-index:0}
     .practice-visual-v2 .bg::after{
       content:""; position:absolute; inset:0;
       background:linear-gradient(180deg, rgba(11,16,38,.2) 0%, rgba(11,16,38,.55) 40%, rgba(11,16,38,.92) 100%);
@@ -588,9 +588,12 @@
       section{padding:90px 24px 50px}
       .split,.impact-layout,.partnerships-grid,.backcover-grid,.practice-hero-v2{grid-template-columns:1fr; gap:36px}
       .practice-hero-v2{min-height:auto}
-      .practice-visual-v2{border-radius:var(--radius); margin:0; min-height:420px}
+      .practice-visual-v2{border-radius:0; margin:0; min-height:60vh; box-shadow:none}
+      .practice-visual-v2 .bg{background-position:center 20% !important}
       .visual-overlay{padding:36px 28px}
       .practice-content-v2{padding:20px 0}
+      .partnerships-grid{gap:28px}
+      .globe-wrap{max-width:340px}
       .stats-grid{grid-template-columns:repeat(2,1fr)}
       .disciplines{grid-template-columns:repeat(2,1fr)}
       .campus-trio{grid-template-columns:1fr}
@@ -605,12 +608,16 @@
     }
     @media(max-width:640px){
       section{padding:80px 16px 40px}
-      .practice-visual-v2{min-height:340px; border-radius:var(--radius-sm)}
+      .practice-visual-v2{min-height:50vh; border-radius:0}
       .emblem-text{font-size:36px}
       .practice-title{font-size:42px}
       .practice-content-v2{padding:16px 0}
       .practice-stats-v2{grid-template-columns:repeat(2,1fr)}
       .dl-grid{grid-template-columns:repeat(2,1fr)}
+      .partnerships-grid{grid-template-columns:1fr}
+      .globe-wrap{max-width:280px}
+      .map-card{padding:24px}
+      .case-card{padding:20px}
       .stats-grid{grid-template-columns:repeat(2,1fr); gap:10px}
       .stat-card{padding:22px 12px}
       .stat-card .num{font-size:32px}
@@ -627,8 +634,8 @@
   <button class="menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">☰</button>
   <div class="nav-links">
     <a href="#intro">About</a>
-    <a href="#impact-networks">Impact</a>
     <a href="#partnerships">Partners</a>
+    <a href="#impact-networks">Impact</a>
     <a href="#campuses">Campuses</a>
     <a href="#alumni">Alumni</a>
     <a href="#summer-practice">Project</a>
@@ -746,6 +753,81 @@
         <div class="stat-card reveal stagger-3">
           <div class="num">30<span>+</span></div>
           <div class="label">Intl. Alumni<br>in National Academies</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PARTNERSHIPS ═══════════════ -->
+<section id="partnerships">
+  <div class="container">
+    <div class="page-label reveal">Global Network</div>
+    <div class="partnerships-grid reveal">
+      <div class="reveal-left">
+        <div class="globe-card spotlight-card">
+          <h3>Global Collaboration Network</h3>
+          <div class="globe-subtitle">160+ partners across 45+ countries · Drag to rotate</div>
+          <div class="globe-wrap">
+            <svg id="globe-svg" viewBox="0 0 480 480">
+              <defs>
+                <radialGradient id="globeOcean" cx="35%" cy="30%" r="85%">
+                  <stop offset="0%" stop-color="#1A3582"/><stop offset="50%" stop-color="#131F55"/><stop offset="85%" stop-color="#0E1736"/><stop offset="100%" stop-color="#060A14"/>
+                </radialGradient>
+                <radialGradient id="globeAtmosphere" cx="50%" cy="50%" r="50%">
+                  <stop offset="75%" stop-color="rgba(173,152,110,0)"/><stop offset="90%" stop-color="rgba(173,152,110,.10)"/><stop offset="97%" stop-color="rgba(173,152,110,.2)"/><stop offset="100%" stop-color="rgba(173,152,110,0)"/>
+                </radialGradient>
+                <linearGradient id="atmOuterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(173,152,110,.06)"/><stop offset="50%" stop-color="rgba(138,180,248,.04)"/><stop offset="100%" stop-color="rgba(173,152,110,.06)"/>
+                </linearGradient>
+                <filter id="pointGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="pointGlowHover" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="nodeGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="arcGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g id="globe-stars"></g><circle cx="240" cy="240" r="220" class="globe-ocean"/>
+              <circle cx="240" cy="240" r="222" class="globe-atmosphere-outer"/>
+              <circle cx="240" cy="240" r="224" class="globe-atmosphere-inner"/>
+              <clipPath id="globeClip"><circle cx="240" cy="240" r="220"/></clipPath>
+              <g clip-path="url(#globeClip)">
+                <g id="globe-countries"></g><path id="globe-graticule" class="globe-graticule"></path>
+                <g id="globe-arcs"></g><g id="globe-pulses"></g><g id="globe-points"></g><g id="globe-labels"></g>
+              </g>
+              <circle cx="240" cy="240" r="220" class="globe-sphere"/>
+            </svg>
+            <div class="globe-tooltip" id="globe-tooltip"></div>
+          </div>
+          <div class="globe-drag-hint">Drag to rotate · Scroll to zoom · Hover for details</div>
+          <div class="globe-stats">
+            <div class="globe-stat"><div class="num">160+</div><div class="txt">Partners</div></div>
+            <div class="globe-stat"><div class="num">45+</div><div class="txt">Countries</div></div>
+            <div class="globe-stat"><div class="num">~2,000</div><div class="txt">Intl Students</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="map-card spotlight-card">
+          <h3>Cooperation Programs</h3>
+          <ul class="partner-list">
+            <li>SEU–Monash Joint Graduate School (Suzhou) — joint PhD programs &amp; advanced materials</li>
+            <li>HKUST–SEU Space Robotics &amp; Energy Center — lunar exploration &amp; sustainable energy</li>
+            <li>China-Indonesia College of Elite Engineers — university-enterprise talent model</li>
+            <li>Secretariat of Sino-British University Engineering Education &amp; Research Alliance</li>
+            <li>160+ partner institutions across 45+ countries — Cambridge, MIT, ETH Zurich, NUS…</li>
+          </ul>
+        </div>
+        <div class="cases">
+          <div class="case-card spotlight-card reveal stagger-1">
+            <h4>SEU–Monash Joint Graduate School</h4>
+            <p>Co-led by Prof. Aibing Yu (Fellow of Australian Academy). Joint PhD programs in advanced materials, energy and transportation.</p>
+          </div>
+          <div class="case-card spotlight-card reveal stagger-2">
+            <h4>Sino-British Engineering Education Alliance</h4>
+            <p>SEU serves as Secretariat. Cambridge, Imperial, Leeds, Edinburgh, Birmingham and more.</p>
+          </div>
+          <div class="case-card spotlight-card reveal stagger-3">
+            <div class="case-stat">24<span>International Research Platforms · 20 Countries · 60+ Universities</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -921,81 +1003,6 @@
             <p>Hanchuan Peng — leading brain imaging and neuroinformatics expert. Zhen Xu — advancing non-invasive therapeutic ultrasound and medical imaging.</p>
             <div class="badges"><span class="badge">AIMBE Fellow</span><span class="badge">IEEE Fellow</span><span class="badge">Brain Imaging</span></div>
             <div class="hint">live profile</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PARTNERSHIPS ═══════════════ -->
-<section id="partnerships">
-  <div class="container">
-    <div class="page-label reveal">Global Network</div>
-    <div class="partnerships-grid reveal">
-      <div class="reveal-left">
-        <div class="globe-card spotlight-card">
-          <h3>Global Collaboration Network</h3>
-          <div class="globe-subtitle">160+ partners across 45+ countries · Drag to rotate</div>
-          <div class="globe-wrap">
-            <svg id="globe-svg" viewBox="0 0 480 480">
-              <defs>
-                <radialGradient id="globeOcean" cx="35%" cy="30%" r="85%">
-                  <stop offset="0%" stop-color="#1A3582"/><stop offset="50%" stop-color="#131F55"/><stop offset="85%" stop-color="#0E1736"/><stop offset="100%" stop-color="#060A14"/>
-                </radialGradient>
-                <radialGradient id="globeAtmosphere" cx="50%" cy="50%" r="50%">
-                  <stop offset="75%" stop-color="rgba(173,152,110,0)"/><stop offset="90%" stop-color="rgba(173,152,110,.10)"/><stop offset="97%" stop-color="rgba(173,152,110,.2)"/><stop offset="100%" stop-color="rgba(173,152,110,0)"/>
-                </radialGradient>
-                <linearGradient id="atmOuterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="rgba(173,152,110,.06)"/><stop offset="50%" stop-color="rgba(138,180,248,.04)"/><stop offset="100%" stop-color="rgba(173,152,110,.06)"/>
-                </linearGradient>
-                <filter id="pointGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                <filter id="pointGlowHover" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                <filter id="nodeGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                <filter id="arcGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              </defs>
-              <g id="globe-stars"></g><circle cx="240" cy="240" r="220" class="globe-ocean"/>
-              <circle cx="240" cy="240" r="222" class="globe-atmosphere-outer"/>
-              <circle cx="240" cy="240" r="224" class="globe-atmosphere-inner"/>
-              <clipPath id="globeClip"><circle cx="240" cy="240" r="220"/></clipPath>
-              <g clip-path="url(#globeClip)">
-                <g id="globe-countries"></g><path id="globe-graticule" class="globe-graticule"></path>
-                <g id="globe-arcs"></g><g id="globe-pulses"></g><g id="globe-points"></g><g id="globe-labels"></g>
-              </g>
-              <circle cx="240" cy="240" r="220" class="globe-sphere"/>
-            </svg>
-            <div class="globe-tooltip" id="globe-tooltip"></div>
-          </div>
-          <div class="globe-drag-hint">Drag to rotate · Scroll to zoom · Hover for details</div>
-          <div class="globe-stats">
-            <div class="globe-stat"><div class="num">160+</div><div class="txt">Partners</div></div>
-            <div class="globe-stat"><div class="num">45+</div><div class="txt">Countries</div></div>
-            <div class="globe-stat"><div class="num">~2,000</div><div class="txt">Intl Students</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="reveal-right">
-        <div class="map-card spotlight-card">
-          <h3>Cooperation Programs</h3>
-          <ul class="partner-list">
-            <li>SEU–Monash Joint Graduate School (Suzhou) — joint PhD programs &amp; advanced materials</li>
-            <li>HKUST–SEU Space Robotics &amp; Energy Center — lunar exploration &amp; sustainable energy</li>
-            <li>China-Indonesia College of Elite Engineers — university-enterprise talent model</li>
-            <li>Secretariat of Sino-British University Engineering Education &amp; Research Alliance</li>
-            <li>160+ partner institutions across 45+ countries — Cambridge, MIT, ETH Zurich, NUS…</li>
-          </ul>
-        </div>
-        <div class="cases">
-          <div class="case-card spotlight-card reveal stagger-1">
-            <h4>SEU–Monash Joint Graduate School</h4>
-            <p>Co-led by Prof. Aibing Yu (Fellow of Australian Academy). Joint PhD programs in advanced materials, energy and transportation.</p>
-          </div>
-          <div class="case-card spotlight-card reveal stagger-2">
-            <h4>Sino-British Engineering Education Alliance</h4>
-            <p>SEU serves as Secretariat. Cambridge, Imperial, Leeds, Edinburgh, Birmingham and more.</p>
-          </div>
-          <div class="case-card spotlight-card reveal stagger-3">
-            <div class="case-stat">24<span>International Research Platforms · 20 Countries · 60+ Universities</span></div>
           </div>
         </div>
       </div>
